@@ -132,7 +132,7 @@ const Header = () => {
               </nav>
             </div>
             <p className="text-sm cursor-pointer px-2 py-1 rounded-sm flex items-center gap-1">
-              {site_languages.map((lang, index) => {
+              {site_languages?.map((lang, index) => {
                 const isSelected =
                   lang.lang_code === selectedLanguage?.lang_code;
                 return (

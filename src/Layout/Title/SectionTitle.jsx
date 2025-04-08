@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SectionTitle = ({className , text , onClick}) => {
+const SectionTitle = ({className , text , onClick , }) => {
   return (
     <p onClick={onClick} className={`text-[38px] text-theme font-semibold  ${className}`}>{text}</p>
   )
