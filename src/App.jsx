@@ -1,17 +1,28 @@
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Bounce, ToastContainer } from "react-toastify";
-import ScrollToTop from "./Utils/ScrollToTop";
+import { ToastContainer, Bounce } from "react-toastify";
 import Header from "./Components/Header/Header";
+import ScrollToTop from "./Utils/ScrollToTop";
+
+import Preloader from "./Utils/Preloader";
+import { LoadingProvider, useLoading } from "./Utils/Context/LoadingContext";
+
+
+function AppWrapper() {
+  return (
+    <LoadingProvider>
+      <App />
+    </LoadingProvider>
+  );
+}
+
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  // Render application layout
+  const { isLoading } = useLoading();
+
   return (
     <div className="relative">
-        <Header/>
-        {/* <ScrollToTop /> */}
-
-        <ToastContainer
+      {isLoading && <Preloader />}
+      <Header />
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
@@ -24,16 +35,10 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-        <ScrollToTop />
-        <Outlet /> {/* Pass data via context */}
+      <ScrollToTop />
+      <Outlet />
     </div>
   );
 }
 
-export default App;
-
-
-
-
-
-
+export default AppWrapper;

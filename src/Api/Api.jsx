@@ -1,11 +1,14 @@
 // src/Api/Api.jsx
-const viteApiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const viteApiVersion = import.meta.env.VITE_API_VERSION;
+export const api = import.meta.env.VITE_API_BASE_URL;
+export const version = import.meta.env.VITE_API_VERSION;
 
 // Home Content Api API URL
-export const homeContentApi = `${viteApiBaseUrl}/${viteApiVersion}/home`;
+export const homeContentApi = `${api}/${version}/home`;
 
 // Common Data Api
-export const commonDataApi = `${viteApiBaseUrl}/${viteApiVersion}/common-data`;
+export const commonDataApi = `${api}/${version}/common-data`;
+
+// Landing Section Api
+export const landingSectionDataApi = `${api}/${version}/home/landing-section`;
 
 

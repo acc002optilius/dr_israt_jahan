@@ -8,3 +8,8 @@
   margin: 0px;
   padding: 0px;
 }
+
+:root {
+  --theme-color: #8832DF; /* Website theme color */
+
+}

@@ -92,6 +92,8 @@ const CMO = () => {
               </div>
             </div>
             <div className="col-span-6">
+              <div className="" data-aos="fade-left" data-aos-delay="300">
+
               <SectionTitle
                 className=" w-full lg:w-[70%]"
                 text="Welcome to Our
@@ -102,6 +104,7 @@ const CMO = () => {
                 className="py-4 text-primary"
                 text={`"At our healthcare center, we prioritize patient well-being and deliver compassionate care. Our dedicated team of professionals is here to ensure the highest standards of medical excellence for you and your family."`}
               />
+              </div>
               <div
                 className="max-w-[200px] hover:scale-110 duration-500"
                 data-aos="fade-left"

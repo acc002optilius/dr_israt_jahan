@@ -27,6 +27,7 @@ export default {
         static : "#000",
         footerBg : "#4C4C4C",
         borderColor : "#dddddd",
+        buttonHover : "transparent",
         skeletonLoading : "#cbd5e1"
       },
       padding: {

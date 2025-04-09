@@ -51,14 +51,13 @@ const Header = () => {
   const { site_languages } = useSelector(
     (state) => state.commonData.siteCommonData
   );
-  console.log(site_languages);
   const handleLanguageSelect = (language) => {
     dispatch(setLanguage(language)); // language is the full object now
   };
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
-  console.log(selectedLanguage);
+
   
   return (
     <header className="sticky top-0 z-50 bg-theme shadow-sm">
