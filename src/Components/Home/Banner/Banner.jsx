@@ -97,7 +97,6 @@ const Banner = ({ bannerData , translations}) => {
       ></div>
     ),
   };
-  console.log(translations);
   
   //   // Function to get translated content
   const getTranslatedContent = (sliderItem) => {

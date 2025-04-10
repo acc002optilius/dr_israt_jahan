@@ -11,25 +11,29 @@ const OurDepartment = ({ translations, department }) => {
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
-// Animation
+  // Animation
   useEffect(() => {
     AOS.init({
       duration: 1000, // animation duration in ms
       once: false, // allows animation every time section enters view
     });
   }, []);
-//   Go Single DepartMent Page
-const handleGoSingleDepartMentPage = (slug) => {
-console.log(slug);
-}
+  //   Go Single DepartMent Page
+  const handleGoSingleDepartMentPage = (slug) => {
+    console.log(slug);
+  };
 
-// Api Data Translation
-// Get translated content for department items
-const getTranslatedContent = (item) => {
-    if (!selectedLanguage || !item.translations || item.translations.length === 0) {
+  // Api Data Translation
+  // Get translated content for department items
+  const getTranslatedContent = (item) => {
+    if (
+      !selectedLanguage ||
+      !item.translations ||
+      item.translations.length === 0
+    ) {
       return {
         name: item.name,
-        short_description: item.short_description
+        short_description: item.short_description,
       };
     }
 
@@ -40,7 +44,8 @@ const getTranslatedContent = (item) => {
 
     return {
       name: translation?.name || item.name,
-      short_description: translation?.short_description || item.short_description
+      short_description:
+        translation?.short_description || item.short_description,
     };
   };
 
@@ -57,11 +62,11 @@ const getTranslatedContent = (item) => {
     return translation ? translation.value : defaultText;
   };
   console.log(department);
-  
+
   return (
     <div className="">
       <Container>
-        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg" >
+        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
           <SectionTitle
             className="!text-center"
             text={getTranslation("Our_Departments", "Our Departments")}
@@ -74,7 +79,7 @@ const getTranslatedContent = (item) => {
             )}
           />
           <div className="pt-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {department?.map((item, index) => {
                 const content = getTranslatedContent(item);
                 return (
@@ -83,15 +88,16 @@ const getTranslatedContent = (item) => {
                     data-aos="zoom-in"
                     data-aos-duration="800"
                     onClick={() => handleGoSingleDepartMentPage(item.slug)}
-                    className="p-6 bg-theme border-[1px] border-theme rounded-md group hover:!bg-transparent !transition-all !duration-500 !ease-in-out"
+                    className="p-6 bg-theme  border-[1px] border-theme rounded-md group hover:!bg-transparent !transition-all !duration-500 !ease-in-out"
                   >
-                    <div className="aspect-[1/1] max-h-[60px] m-auto rounded-full overflow-hidden border-[1px] border-theme">
-                      <img
+                    <div className="bg-[#DEE5E3] w-[50px] h-[50px] text-theme group-hover:bg-theme group-hover:text-[#DEE5E3] flex justify-center items-center m-auto rounded-full border-[1px] border-theme">
+                    <i className={`${item.icon}`}></i>
+                      {/* <img
                         src={`${api}/${item.icon}`}
                         alt=""
                         className="w-full h-full object-fill"
                         loading="lazy"
-                      />
+                      /> */}
                     </div>
                     <MidTitle
                       className="font-semibold text-secondary !text-lg text-center group-hover:text-theme pt-2 truncate"
@@ -99,11 +105,15 @@ const getTranslatedContent = (item) => {
                     />
 
                     <MinTitle
-                      className="text-secondary text-center py-1 group-hover:text-theme line-clamp-3"
-                      text={content.short_description}
+                      className="text-secondary text-center py-2 group-hover:text-theme "
+                      text={
+                        content.short_description.length > 80
+                          ? content.short_description.slice(0, 80) + "..."
+                          : content.short_description
+                      }
                     />
-                    <p className="text-secondary text-center text-sm cursor-pointer group-hover:text-theme">
-                    {getTranslation("Read_More", "Read More")}
+                    <p className="text-secondary text-center text-sm cursor-pointer group-hover:text-theme hover:underline inline-block flex justify-center duration-300">
+                      {getTranslation("Read_More", "Read More")}
                     </p>
                   </div>
                 );
