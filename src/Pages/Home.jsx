@@ -17,6 +17,8 @@ import OurDepartment from "../Components/Home/OurDepartment";
 import WhyChooseUs from "../Components/Home/WhyChooseUs";
 import Statistics from "../Components/Home/Statistics";
 import DoctorsOverView from "../Components/Home/DoctorsOverView";
+import MakeAppointment from "../Components/Home/MakeAppointment";
+import OurServices from "../Components/Home/OurServices";
 
 const Home = () => {
   const { setIsLoading } = useLoading();
@@ -100,6 +102,11 @@ const Home = () => {
       <DoctorsOverView
         translations={homeContentData.translations}
         data={homeContentData?.doctors}
+      />
+      <MakeAppointment doctorsList={homeContentData.doctors} translations={homeContentData.translations} />
+      <OurServices
+        translations={homeContentData.translations}
+        data={homeContentData?.services}
       />
     </div>
   );

@@ -61,7 +61,6 @@ const OurDepartment = ({ translations, department }) => {
     );
     return translation ? translation.value : defaultText;
   };
-  console.log(department);
 
   return (
     <div className="">

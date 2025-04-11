@@ -18,7 +18,8 @@ import DoctorCard from "../../Layout/Card/DoctorCard";
 import PrimaryButton from "../../Layout/Button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../Layout/Button/LoadingButton";
-const DoctorsOverView = ({ translations, data }) => {
+import ServiceCard from "../../Layout/Card/ServiceCard";
+const OurServices = ({ translations, data }) => {
   const [visibleItems, setVisibleItems] = useState(8);
   const navigate = useNavigate();
   const viewAllDoctors = () => {
@@ -33,7 +34,7 @@ const DoctorsOverView = ({ translations, data }) => {
   // Animation
   useEffect(() => {
     AOS.init({
-      duration: 1000, // animation duration in ms
+
       once: false, // allows animation every time section enters view
     });
   }, []);
@@ -42,7 +43,9 @@ const DoctorsOverView = ({ translations, data }) => {
     console.log(slug);
   };
 
-  // Api Data Translation
+
+
+// Api Data Translation
   // Get translated content for department items
   const getTranslatedContent = (item) => {
     if (
@@ -89,20 +92,20 @@ const DoctorsOverView = ({ translations, data }) => {
           <div className="" data-aos="fade-up">
             <SectionTitle
               className="!text-center"
-              text={getTranslation("Doctors", "Doctors")}
+              text={getTranslation("Our_Services", "Our Services")}
             />
             <MinTitle
               className="!text-center w-full lg:w-[50%] text-primary m-auto py-2"
               text={getTranslation(
-                "Doctors_home_included_section_desc",
-                "We have a team of experienced and qualified doctors who can provide you with the best possible care."
+                "Services_home_included_section_desc",
+                "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers"
               )}
             />
           </div>
           <div data-aos="fade-up" className="pt-6">
             <div className="">
               <Swiper
-                slidesPerView={4}
+                slidesPerView={3}
                 spaceBetween={20}
                 slidesPerGroup={1}
                 autoplay={{
@@ -115,24 +118,23 @@ const DoctorsOverView = ({ translations, data }) => {
                   1: { slidesPerView: 1 },
                   406: { slidesPerView: 2 },
                   576: { slidesPerView: 3 },
-                  768: { slidesPerView: 4 },
-                  1024: { slidesPerView: 4 },
-                  1200: { slidesPerView: 4 },
+                  768: { slidesPerView: 3 },
+                  1024: { slidesPerView: 3 },
+                  1200: { slidesPerView: 3 },
                 }}
                 className="mySwiper"
               >
                 {data?.slice(0, visibleItems).map((item, index) => {
-                  const content = getTranslatedContent(item);
+                    const content = getTranslatedContent(item);
                   return (
                     <SwiperSlide key={index}>
-                      <DoctorCard
-                        firstName={item?.first_name}
-                        lastName={item?.last_name}
-                        doctorId={item?.doctor_id}
-                        department={item?.department}
+                      <ServiceCard
+                        name={content?.name}
+                        slug={item?.slug}
+                        shortDesc={content?.short_description}
                         socialNetworks={item?.social_networks}
                         image={item?.image}
-                        cardAnimation="flip-right"
+                        cardAnimation="zoom-in"
                       />
                     </SwiperSlide>
                   );
@@ -158,4 +160,4 @@ const DoctorsOverView = ({ translations, data }) => {
   );
 };
 
-export default DoctorsOverView;
+export default OurServices

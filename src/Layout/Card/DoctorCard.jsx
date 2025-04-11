@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { api } from "../../Api/Api";
 import defaultDoctorImg from "../../assets/Doctor/defaultDoctorImg.jpg";
 import MinTitle from "../Title/MinTitle";
@@ -10,7 +10,8 @@ import {
   FaLinkedin,
   FaXTwitter,
 } from "react-icons/fa6";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const DoctorCard = ({
   firstName,
   lastName,
@@ -18,7 +19,7 @@ const DoctorCard = ({
   department,
   socialNetworks = {},
   image,
-
+cardAnimation ,
   key,
 }) => {
 
@@ -33,6 +34,14 @@ const handleSingleDoctor = (id) => {
     console.log(id);
     
 }
+
+// For Animation
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // animation duration in ms
+      once: false, // allows animation every time section enters view
+    });
+  }, []);
   // Get translated department name
   const getTranslatedDepartmentName = () => {
     if (department?.translations && selectedLanguage?.lang_code) {
@@ -54,6 +63,7 @@ const handleSingleDoctor = (id) => {
 
   return (
     <div
+      data-aos={`${cardAnimation}`} data-aos-duration="2000" data-aos-delay="300"
       key={key}
       className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
     >
