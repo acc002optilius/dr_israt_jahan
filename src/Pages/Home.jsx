@@ -19,6 +19,7 @@ import Statistics from "../Components/Home/Statistics";
 import DoctorsOverView from "../Components/Home/DoctorsOverView";
 import MakeAppointment from "../Components/Home/MakeAppointment";
 import OurServices from "../Components/Home/OurServices";
+import Testimonial from "../Components/Home/Testimonial";
 
 const Home = () => {
   const { setIsLoading } = useLoading();
@@ -103,10 +104,17 @@ const Home = () => {
         translations={homeContentData.translations}
         data={homeContentData?.doctors}
       />
-      <MakeAppointment doctorsList={homeContentData.doctors} translations={homeContentData.translations} />
+      <MakeAppointment
+        doctorsList={homeContentData.doctors}
+        translations={homeContentData.translations}
+      />
       <OurServices
         translations={homeContentData.translations}
         data={homeContentData?.services}
+      />
+      <Testimonial
+        translations={homeContentData.translations}
+        data={homeContentData?.testimonials}
       />
     </div>
   );
