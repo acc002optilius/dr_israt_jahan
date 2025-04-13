@@ -119,7 +119,7 @@ const Home = () => {
       />
       <CaseStudisOverview
         translations={homeContentData.translations}
-        data={homeContentData?.services}
+        data={homeContentData?.case_studies}
       />
     </div>
   );

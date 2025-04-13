@@ -19,6 +19,7 @@ import PrimaryButton from "../../Layout/Button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../Layout/Button/LoadingButton";
 import ServiceCard from "../../Layout/Card/ServiceCard";
+import CaseStudisCard from "../../Layout/Card/CaseStudisCard";
 const CaseStudisOverview = ({ translations, data }) => {
   const [visibleItems, setVisibleItems] = useState(8);
   const navigate = useNavigate();
@@ -34,7 +35,6 @@ const CaseStudisOverview = ({ translations, data }) => {
   // Animation
   useEffect(() => {
     AOS.init({
-
       once: false, // allows animation every time section enters view
     });
   }, []);
@@ -43,9 +43,7 @@ const CaseStudisOverview = ({ translations, data }) => {
     console.log(slug);
   };
 
-
-
-// Api Data Translation
+  // Api Data Translation
   // Get translated content for department items
   const getTranslatedContent = (item) => {
     if (
@@ -84,7 +82,6 @@ const CaseStudisOverview = ({ translations, data }) => {
     return translation ? translation.value : defaultText;
   };
 
-
   return (
     <div className="">
       <Container>
@@ -92,13 +89,13 @@ const CaseStudisOverview = ({ translations, data }) => {
           <div className="" data-aos="fade-up">
             <SectionTitle
               className="!text-center"
-              text={getTranslation("Our_Services", "Our Services")}
+              text={getTranslation("Case_Study", "Case Study")}
             />
             <MinTitle
               className="!text-center w-full lg:w-[50%] text-primary m-auto py-2"
               text={getTranslation(
-                "Services_home_included_section_desc",
-                "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers"
+                "Case_Study_home_included_section_desc",
+                "Case Studies That Inspire Confidence"
               )}
             />
           </div>
@@ -125,15 +122,16 @@ const CaseStudisOverview = ({ translations, data }) => {
                 className="mySwiper"
               >
                 {data?.slice(0, visibleItems).map((item, index) => {
-                    const content = getTranslatedContent(item);
+                  const content = getTranslatedContent(item);
                   return (
                     <SwiperSlide key={index}>
-                      <ServiceCard
-                        name={content?.name}
+                      <CaseStudisCard
+                        title={content?.title}
                         slug={item?.slug}
-                        shortDesc={content?.short_description}
+                        shortDesc={content?.description}
                         socialNetworks={item?.social_networks}
-                        image={item?.image}
+                        image={item?.thumbnail}
+                        depardment={item?.department}
                         cardAnimation="zoom-in"
                       />
                     </SwiperSlide>
@@ -160,4 +158,4 @@ const CaseStudisOverview = ({ translations, data }) => {
   );
 };
 
-export default CaseStudisOverview
+export default CaseStudisOverview;

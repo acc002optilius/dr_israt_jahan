@@ -141,7 +141,7 @@ const Testimonial = ({ translations, data }) => {
               </Swiper>
             </div>
           </div>
-          {data?.length > visibleItems && (
+          {/* {data?.length > visibleItems && (
             <div className="mt-4 text-center mx-auto">
               <div className="inline-block pt-4">
                 <LoadingButton
@@ -152,7 +152,7 @@ const Testimonial = ({ translations, data }) => {
                 />
               </div>
             </div>
-          )}
+          )} */}
         </Container>
       </div>
     </div>

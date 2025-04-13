@@ -94,6 +94,10 @@ const TestimonialCard = ({
           />
         </div>
       </div>
+      <div className="shape absolute w-24 h-12 bg-theme bg-opacity-[0.6] bottom-[-5%] right-16" style={{
+                    borderTopLeftRadius: "300px",
+                    borderTopRightRadius: "300px",
+                  }}></div>
     </div>
   );
 };
