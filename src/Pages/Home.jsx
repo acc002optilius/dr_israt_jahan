@@ -21,6 +21,8 @@ import MakeAppointment from "../Components/Home/MakeAppointment";
 import OurServices from "../Components/Home/OurServices";
 import Testimonial from "../Components/Home/Testimonial";
 import CaseStudisOverview from "../Components/Home/CaseStudisOverview";
+import GallaryOveriew from "../Components/Home/GallaryOveriew";
+import BlogsOverview from "../Components/Home/BlogsOverview";
 
 const Home = () => {
   const { setIsLoading } = useLoading();
@@ -57,29 +59,6 @@ const Home = () => {
       setIsLoading(false);
     };
   }, [dispatch, setIsLoading]);
-  // Fetch CommonData Api
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(commonDataApi, {});
-        dispatch(setSiteCommonData(response.data.data));
-        // Ensure default language is set if missing
-        if (
-          !selectedLanguage &&
-          response.data.data.site_languages?.length > 0
-        ) {
-          dispatch(setInitialLanguage(response.data.data.site_languages));
-        }
-        // console.log(response);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
 
   console.log(homeContentData);
 
@@ -120,6 +99,14 @@ const Home = () => {
       <CaseStudisOverview
         translations={homeContentData.translations}
         data={homeContentData?.case_studies}
+      />
+      <GallaryOveriew
+        translations={homeContentData.translations}
+        data={homeContentData?.gallery}
+      />
+      <BlogsOverview
+        translations={homeContentData.translations}
+        data={homeContentData?.blogs}
       />
     </div>
   );

@@ -13,7 +13,7 @@ const Header = () => {
   const dispatch = useDispatch();
   // Static menu data - replace with API call later
   const menuItems = [
-    { name: "Home", href: "#", hasDropdown: false },
+    { name: "Home", href: "/", hasDropdown: false },
     { name: "Find a Doctor", href: "#", hasDropdown: false },
     { name: "About", href: "#", hasDropdown: false },
     {
@@ -27,7 +27,7 @@ const Header = () => {
         { name: "Dermatology", href: "#" },
       ],
     },
-    { name: "Doctors", href: "#", hasDropdown: false },
+    { name: "Doctors", href: "/doctors", hasDropdown: false },
     {
       name: "Departments",
       href: "#",

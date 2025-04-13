@@ -20,7 +20,10 @@ import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../Layout/Button/LoadingButton";
 import ServiceCard from "../../Layout/Card/ServiceCard";
 import CaseStudisCard from "../../Layout/Card/CaseStudisCard";
-const CaseStudisOverview = ({ translations, data }) => {
+import BlogCard from "../../Layout/Card/BlogCard";
+import DOMPurify from "dompurify";
+import htmlTruncate from "html-truncate";
+const BlogsOverview = ({ translations, data }) => {
   const [visibleItems, setVisibleItems] = useState(8);
   const navigate = useNavigate();
   const viewAllDoctors = () => {
@@ -64,8 +67,7 @@ const CaseStudisOverview = ({ translations, data }) => {
 
     return {
       title: translation?.title || item.title,
-      description:
-        translation?.description || item.description,
+      description: translation?.description || item.description,
     };
   };
 
@@ -89,13 +91,13 @@ const CaseStudisOverview = ({ translations, data }) => {
           <div className="" data-aos="fade-up">
             <SectionTitle
               className="!text-center"
-              text={getTranslation("Case_Study", "Case Study")}
+              text={getTranslation("Latest_Blogs", "Latest Blogs")}
             />
             <MinTitle
               className="!text-center w-full lg:w-[50%] text-primary m-auto py-2"
               text={getTranslation(
-                "Case_Study_home_included_section_desc",
-                "Case Studies That Inspire Confidence"
+                "Latest_Blogs_home_included_section_desc",
+                "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers."
               )}
             />
           </div>
@@ -121,20 +123,21 @@ const CaseStudisOverview = ({ translations, data }) => {
                 }}
                 className="mySwiper"
               >
-                {data?.slice(0, visibleItems).map((item, index) => { 
+                {data?.slice(0, visibleItems).map((item, index) => {
                   const content = getTranslatedContent(item);
                   // console.log(content);
-                  
+
                   return (
                     <SwiperSlide key={index}>
-                      <CaseStudisCard
+                      <BlogCard
                         title={content?.title}
                         slug={item?.slug}
-                        shortDesc={content?.description}
+                        description={content?.description}
                         socialNetworks={item?.social_networks}
-                        image={item?.thumbnail}
-                        department={item?.department}
+                        thumbnail={item?.thumbnail}
+                        category={item?.category}
                         cardAnimation="zoom-out-up"
+                        displayDate={item.display_date}
                       />
                     </SwiperSlide>
                   );
@@ -160,4 +163,4 @@ const CaseStudisOverview = ({ translations, data }) => {
   );
 };
 
-export default CaseStudisOverview;
+export default BlogsOverview;

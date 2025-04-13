@@ -5,6 +5,12 @@ import ScrollToTop from "./Utils/ScrollToTop";
 
 import Preloader from "./Utils/Preloader";
 import { LoadingProvider, useLoading } from "./Utils/Context/LoadingContext";
+import axios from "axios";
+import { commonDataApi } from "./Api/Api";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { setInitialLanguage } from "./Redux/Slices/languageSlice";
+import { setSiteCommonData } from "./Redux/Slices/siteCommonData";
 
 
 function AppWrapper() {
@@ -16,8 +22,35 @@ function AppWrapper() {
 }
 
 function App() {
+    const { setIsLoading } = useLoading();
+    const dispatch = useDispatch()
+    const selectedLanguage = useSelector(
+      (state) => state.language.selectedLanguage
+    );
   const { isLoading } = useLoading();
-
+ // Fetch CommonData Api
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(commonDataApi, {});
+        dispatch(setSiteCommonData(response.data.data));
+        // Ensure default language is set if missing
+        if (
+          !selectedLanguage &&
+          response.data.data.site_languages?.length > 0
+        ) {
+          dispatch(setInitialLanguage(response.data.data.site_languages));
+        }
+        // console.log(response);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div className="relative">
       {/* {isLoading && <Preloader />} */}
