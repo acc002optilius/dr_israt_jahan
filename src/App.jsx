@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div className="relative">
-      {isLoading && <Preloader />}
+      {/* {isLoading && <Preloader />} */}
       <Header />
       <ToastContainer
         position="top-right"
