@@ -20,6 +20,7 @@ import DoctorsOverView from "../Components/Home/DoctorsOverView";
 import MakeAppointment from "../Components/Home/MakeAppointment";
 import OurServices from "../Components/Home/OurServices";
 import Testimonial from "../Components/Home/Testimonial";
+import CaseStudisOverview from "../Components/Home/CaseStudisOverview";
 
 const Home = () => {
   const { setIsLoading } = useLoading();
@@ -115,6 +116,10 @@ const Home = () => {
       <Testimonial
         translations={homeContentData.translations}
         data={homeContentData?.testimonials}
+      />
+      <CaseStudisOverview
+        translations={homeContentData.translations}
+        data={homeContentData?.services}
       />
     </div>
   );
