@@ -89,7 +89,7 @@ const CaseStudisCard = ({ name, image, cardAnimation, key, slug, shortDesc }) =>
           shortDesc?.length > 200 ? shortDesc.slice(0, 200) + "..." : shortDesc
         }
       />
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius quaerat, molestiae cumque veniam architecto ratione odit vel! Facere atque iure temporibus id odio. Illum debitis nostrum eligendi, sequi odio libero.
+      
     </div>
   );
 };
