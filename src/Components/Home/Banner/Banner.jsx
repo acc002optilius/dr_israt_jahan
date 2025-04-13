@@ -39,13 +39,13 @@ const PrevArrow = ({ onClick }) => {
   );
 };
 
-const Banner = ({ bannerData , translations}) => {
-  
+const Banner = ({ bannerData, translations }) => {
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const { phone } = useSelector((state) =>
     (state.commonData?.siteCommonData)
   );
-    const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
+  const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
   useEffect(() => {
     AOS.init({
       // duration: 1000, // animation duration in ms
@@ -97,15 +97,15 @@ const Banner = ({ bannerData , translations}) => {
       ></div>
     ),
   };
-  
+
   //   // Function to get translated content
   const getTranslatedContent = (sliderItem) => {
     if (!selectedLanguage || !sliderItem.translations) return sliderItem;
-    
+
     const translation = sliderItem.translations.find(
       (trans) => trans.lang_code === selectedLanguage.lang_code
     );
-    
+
     if (translation) {
       return {
         ...sliderItem,
@@ -115,7 +115,7 @@ const Banner = ({ bannerData , translations}) => {
         btn_text: translation.btn_text || sliderItem.btn_text
       };
     }
-    
+
     return sliderItem;
   };
 
@@ -146,65 +146,61 @@ const Banner = ({ bannerData , translations}) => {
                 <img
                   src={`${api}/${item.image}`}
                   alt={`Banner ${index + 1}`}
-                  className={`w-full h-full object-fill transition-all duration-[5000ms] ease-in-out ${
-                    currentSlide === index ? "scale-110" : "scale-100"
-                  }`}
+                  className={`w-full h-full object-fill transition-all duration-[5000ms] ease-in-out ${currentSlide === index ? "scale-110" : "scale-100"
+                    }`}
                   style={{
                     transition: "transform 5000ms ease-in-out",
                   }}
                 />
-<div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent" />
-<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
 
               {/* Optional text content */}
               <div className="absolute top-0 py-sectionLg left-1/2 transform -translate-x-1/2 text-white z-10 w-full">
                 {translatedItem.subtitle && (
                   <MinTitle
-                    className={`text-4xl text-center text-secondary font-bold mb-2 transition-all duration-500 ${
-                      currentSlide === index
+                    className={`text-4xl text-center text-secondary font-bold mb-2 transition-all duration-500 ${currentSlide === index
                         ? "translate-y-0 opacity-100"
                         : "translate-y-4 opacity-0"
-                    }`}
+                      }`}
                     text={translatedItem.subtitle}
                   />
                 )}
                 {translatedItem.title && (
                   <p
-                    className={`text-6xl leading-[70px] font-bold m-auto py-4 w-[80%] text-center transition-all duration-500 delay-200 ${
-                      currentSlide === index
+                    className={`text-6xl leading-[70px] font-bold m-auto py-4 w-[80%] text-center transition-all duration-500 delay-200 ${currentSlide === index
                         ? "translate-y-0 opacity-100"
                         : "translate-y-4 opacity-0"
-                    }`}
+                      }`}
                   >
                     {translatedItem.title}
                   </p>
                 )}
                 {translatedItem.description && (
                   <MinTitle
-                    className={`text-4xl w-[40%] m-auto text-center text-secondary font-medium mb-2 transition-all duration-500 ${
-                      currentSlide === index
+                    className={`text-4xl w-[40%] m-auto text-center text-secondary font-medium mb-2 transition-all duration-500 ${currentSlide === index
                         ? "translate-y-0 opacity-100"
                         : "translate-y-4 opacity-0"
-                    }`}
+                      }`}
                     text={translatedItem.description}
                   />
                 )}
                 <a href={`tel:${phone}`} className="hotline text-xl py-3 px-4 bg-transparent border-[1px] border-seconary w-[30%] block my-6  mx-auto text-center  ">
                   <span className="font-semibold"> {getTranslation(
-                  "Hotline",
-                  "Hotline"
-                )} </span>: <span className="!text-medium">{phone}</span>
+                    "Hotline",
+                    "Hotline"
+                  )} </span>: <span className="!text-medium">{phone}</span>
                 </a>
                 <div className="btnList grid grid-cols-2 gap-6 w-[50%]  m-auto">
-                  <PrimaryButton  className="capitalize font-medium" text={getTranslation(
-                  "Make_An_Appointment",
-                  "Make An Appointment "
-                )} icon={<LuFileText />}/>
+                  <PrimaryButton className="capitalize font-medium" text={getTranslation(
+                    "Make_An_Appointment",
+                    "Make An Appointment "
+                  )} icon={<LuFileText />} />
                   <SecondaryButton className="capitalize font-medium" text={getTranslation(
-                  "Find_A_Doctor",
-                  "Find A Doctor"
-                )}  icon={<RiUserSearchFill />}/>
+                    "Find_A_Doctor",
+                    "Find A Doctor"
+                  )} icon={<RiUserSearchFill />} />
                 </div>
               </div>
             </div>
