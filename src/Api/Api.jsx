@@ -15,3 +15,10 @@ export const landingSectionDataApi = `${api}/${version}/home/landing-section`;
 export const makeAppointmentApi = `${api}/${version}/appointment-request/submit`;
 
 
+//Find Doctors Api (GET)
+export const findDoctorsApi = `${api}/${version}/doctors/find`;
+
+
+//Subscription Api (GET)
+export const subscriptionApi = `${api}/${version}/subscribe`;
+

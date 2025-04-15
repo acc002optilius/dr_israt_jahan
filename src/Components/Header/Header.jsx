@@ -7,10 +7,17 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "../../Redux/Slices/languageSlice";
+import { api } from "../../Api/Api";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dispatch = useDispatch();
+  const { site_logo } = useSelector(
+    (state) => state.commonData?.siteCommonData
+  );
+
   // Static menu data - replace with API call later
   const menuItems = [
     { name: "Home", href: "/", hasDropdown: false },
@@ -58,7 +65,10 @@ const Header = () => {
     (state) => state.language.selectedLanguage
   );
 
-  
+  // PAGE
+  const handleGoPage = (page) => {
+    navigate(page)
+  }
   return (
     <header className="sticky top-0 z-50 bg-theme shadow-sm">
       <Container>
@@ -66,8 +76,12 @@ const Header = () => {
           <div className="w-[11%]">
             {/* Logo */}
             <a href="#" className="text-2xl font-bold text-blue-600 ">
-              <div className="rounded-md p-2 bg-secondary">
-                <img className="w-full rounded-sm" src={logo} alt="" />
+              <div className="rounded-md px-2 py-1 bg-secondary">
+                <img
+                  className="w-full rounded-sm"
+                  src={site_logo ? `${api}/${site_logo}` : `${logo}`}
+                  alt=""
+                />
               </div>
             </a>
           </div>
@@ -88,15 +102,15 @@ const Header = () => {
                       }
                     >
                       <div className="flex items-center ">
-                        <a
-                          href={item.href}
+                        <div
+                          onClick={() => handleGoPage(item.href)}
                           className={`nav-link text-sm px-3 my-6 cursor-pointer font-medium text-secondary  transition-colors relative group ${
                             activeDropdown === item.name ? "" : ""
                           }`}
                         >
                           {item.name}
                           <span className="absolute bottom-0 left-0 w-0 h-[0.3px] bg-secondary transition-all duration-300 group-hover:w-full"></span>
-                        </a>
+                        </div>
                         {item.hasDropdown && (
                           <IoIosArrowDown
                             className={`text-secondary pt-[2px] ml-0 transition-transform duration-200 ${

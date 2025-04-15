@@ -19,7 +19,7 @@ const DoctorCard = ({
   department,
   socialNetworks = {},
   image,
-cardAnimation ,
+  cardAnimation,
   key,
 }) => {
 
@@ -29,13 +29,13 @@ cardAnimation ,
   );
 
 
-//   Handle Go Single Doctor
-const handleSingleDoctor = (id) => {
+  //   Handle Go Single Doctor
+  const handleSingleDoctor = (id) => {
     console.log(id);
-    
-}
 
-// For Animation
+  }
+
+  // For Animation
   useEffect(() => {
     AOS.init({
       duration: 1000, // animation duration in ms
@@ -89,9 +89,8 @@ const handleSingleDoctor = (id) => {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`bg-secondary  p-2 rounded-full hover:bg-[#eee] transition-all  border-[1px] border-transparent hover:border-theme duration-300 ${
-                  color || "text-theme"
-                }`}
+                className={`bg-secondary  p-2 rounded-full hover:bg-[#eee] transition-all  border-[1px] border-transparent hover:border-theme duration-300 ${color || "text-theme"
+                  }`}
                 aria-label={platform}
               >
                 {icon || platform.charAt(0).toUpperCase()}

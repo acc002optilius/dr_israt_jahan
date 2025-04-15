@@ -11,6 +11,7 @@ import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { api } from "../../Api/Api";
 import LoadingButton from "../../Layout/Button/LoadingButton";
 import { useMediaQuery } from "react-responsive";
+import { BsImages } from "react-icons/bs";
 
 const GalleryOverview = ({ translations, data }) => {
   const [expandedIndex, setExpandedIndex] = useState(0);
@@ -218,12 +219,12 @@ const GalleryOverview = ({ translations, data }) => {
         </div>
 
         {/* Navigation Dots */}
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4 lg:hidden">
           {data?.slice(0, 6).map((_, index) => (
             <button
               key={index}
               className={`w-3 h-3 rounded-full transition-colors ${
-                index === expandedIndex ? "bg-primary" : "bg-gray-300"
+                index === expandedIndex ? "bg-theme" : "bg-gray-300"
               }`}
               onClick={() => {
                 const gallery = galleryRef.current;
@@ -245,6 +246,7 @@ const GalleryOverview = ({ translations, data }) => {
             <LoadingButton
               className="inline-block"
               loadingTime="1000"
+              icon={<BsImages />}
               text={getTranslation("View All", "View All")}
               onClick={() => navigate("/gallery")}
             />
