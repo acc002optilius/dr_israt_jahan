@@ -3,7 +3,6 @@ import { api } from "../../Api/Api";
 import defaultDoctorImg from "../../assets/Doctor/defaultDoctorImg.jpg";
 import MinTitle from "../Title/MinTitle";
 import { useSelector } from "react-redux";
-// If using react-icons (recommended)
 import {
   FaFacebook,
   FaInstagram,
@@ -13,24 +12,34 @@ import {
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { IoArrowRedoSharp } from "react-icons/io5";
-const CaseStudisCard = ({ name, image, cardAnimation, key, slug, shortDesc }) => {
+import SecondaryButton from "../Button/SecondaryButton";
+import { getTranslation } from "../../Utils/Translation/translationUtils";
+
+const CaseStudisCard = ({
+  title,
+  image,
+  cardAnimation,
+  key,
+  slug,
+  shortDesc,
+  department,
+  translations
+}) => {
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
 
-  //   Handle Go Single Doctor
   const handleSingleService = (slug) => {
     console.log(slug);
   };
 
-  // For Animation
   useEffect(() => {
     AOS.init({
-      duration: 500, // animation duration in ms
-      once: false, // allows animation every time section enters view
+      duration: 500,
+      once: false,
     });
   }, []);
-  // Get translated department name
+
   const getTranslatedDepartmentName = () => {
     if (department?.translations && selectedLanguage?.lang_code) {
       const translation = department.translations.find(
@@ -47,49 +56,64 @@ const CaseStudisCard = ({ name, image, cardAnimation, key, slug, shortDesc }) =>
       data-aos-duration="1000"
       data-aos-delay="500"
       key={key}
-      className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+      className="group relative overflow-hidden  shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
     >
-      {/* Image with overlay effect */}
-      <div className="relative aspect-[6/4] flex-1 overflow-hidden">
+      <MinTitle
+        className="absolute top-0 left-0 text-secondary py-2 !text-sm px-4 m-3 z-[2] bg-theme rounded-full opacity-0 scale-95 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:scale-100 pointer-events-none group-hover:pointer-events-auto"
+        text={
+          getTranslatedDepartmentName()?.length > 20
+            ? getTranslatedDepartmentName().slice(0, 30) + "..."
+            : getTranslatedDepartmentName()
+        }
+      />
+      {/* Image container */}
+      <div className="relative aspect-[8/8] flex-1 overflow-hidden">
         <img
           src={image ? `${api}/${image}` : defaultDoctorImg}
-          alt={`${name}`}
+          alt={`${title}`}
           className="w-full h-full object-fill transition-all duration-500 group-hover:scale-105"
         />
 
-        {/* Color overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-color)] to-transparent opacity-0 group-hover:opacity-[0.6]  transition-opacity duration-300"></div>
+        {/* Initial title at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-theme bg-opacity-[0.6] transition-all duration-300 group-hover:opacity-0">
+          <MinTitle
+            className="text-white font-medium text-lg"
+            text={
+              `${title} `.length > 120
+                ? `${title}`.slice(0, 120) + "..."
+                : ` ${title}`
+            }
+          />
+        </div>
+        {/* Color overlay that slides up on hover */}
+        <div className="absolute inset-0 bg-theme bg-opacity-[0.6] opacity-0 group-hover:opacity-80 transition-all duration-500 origin-bottom transform scale-y-0 group-hover:scale-y-100"></div>
+        {/* Depart Ment */}
 
-        {/* Social buttons (shown on hover) */}
-        <div className="absolute inset-0 flex items-center pb-4 justify-center gap-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-black/30">
+        {/* Hover content that slides up */}
+        <div className="absolute inset-0 flex flex-col items-start p-4 justify-end pb-8 opacity-0 group-hover:opacity-100 translate-y-10 group-hover:translate-y-0 transition-all duration-500">
+          <MinTitle
+            onClick={() => handleSingleService(slug)}
+            className="text-white font-bold text-lg mb-2 hover:underline"
+            text={
+              `${title} `.length > 120
+                ? `${title}`.slice(0, 120) + "..."
+                : ` ${title}`
+            }
+          />
           <p
             onClick={() => handleSingleService(slug)}
-            className="text-2xl cursor-pointer text-secondary animate-pulse"
+            className="text-secondary flex items-center gap-2 cursor-pointer hover:underline transition-all hover:ml-4 duration-300"
           >
-            <IoArrowRedoSharp />
+            {getTranslation(
+              translations,
+              selectedLanguage,
+              "Read_More",
+              "Read More"
+            )}{" "}
+            <IoArrowRedoSharp className="text-lg" />
           </p>
         </div>
       </div>
-
-      {/* Doctor info */}
-      <div
-        onClick={() => handleSingleService(slug)}
-        className="bg-theme border-t-[1px] border-theme group-hover:border-theme p-4 text-center flex-none duration-500 cursor-pointer"
-      >
-        <MinTitle
-          className="text-secondary font-bold text-lg"
-          text={
-            `${name} `.length > 40 ? `${name}`.slice(0, 40) + "..." : ` ${name}`
-          }
-        />
-      </div>
-      <MinTitle
-        className="text-primary bg-theme bg-opacity-[0.3] p-4"
-        text={
-          shortDesc?.length > 200 ? shortDesc.slice(0, 200) + "..." : shortDesc
-        }
-      />
-      
     </div>
   );
 };

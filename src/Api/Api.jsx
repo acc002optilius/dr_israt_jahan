@@ -17,3 +17,6 @@ export const makeAppointmentApi = `${api}/${version}/appointment-request/submit`
 
 //Find Doctors Api (GET)
 export const findDoctorsApi = `${api}/${version}/doctors/find`;
+
+//Doctors Api (GET)
+export const doctorsApi = `${api}/${version}/doctors`;

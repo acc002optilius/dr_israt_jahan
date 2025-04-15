@@ -3,63 +3,119 @@ import SectionTitle from '../Layout/Title/SectionTitle'
 import InputLabel from '../Layout/Input/InputLabel/InputLabel'
 import UserAuthInput from '../Layout/Input/UserAuthForm/UserAuthInput'
 import { getTranslation } from '../Utils/Translation/translationUtils'
-import { findDoctorsApi } from '../Api/Api'
+import { findDoctorsApi, doctorsApi } from '../Api/Api'
 import Container from '../Layout/Container'
 import DoctorCard from '../Layout/Card/DoctorCard'
 import MinTitle from '../Layout/Title/MinTitle'
-const Doctors = ({
-  selectedLanguage,
-  translations,
-  handleChange,
-  Search_by_Department,
-  Search_by_Name,
-  inputErrors
-}) => {
-  const [apiData, setApiData] = useState(null)
+import LoadingButton from '../Layout/Button/LoadingButton'
+import { useSelector } from 'react-redux'
 
+const Doctors = () => {
+
+  const selectedLanguage = useSelector(
+    (state) => state.language.selectedLanguage
+  );
+
+  const [translations, setTranslations] = useState({})
+
+  const [visibleItems, setVisibleItems] = useState(12);
+
+  const [departments, setDepartments] = useState([])
+  const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const [search_by_Name, setSearchByName] = useState('')
+  const [search_by_Department, setSearchByDepartment] = useState('')
+  const [inputErrors, setInputErrors] = useState({})
+
+  const viewMoreDoctors = () => {
+    setVisibleItems((prev) => prev + 8)
+  };
+
   useEffect(() => {
-    fetch(findDoctorsApi)
-      .then((res) => {
-        if (!res.ok) throw new Error('Something went wrong!')
-        return res.json()
-      })
-      .then((data) => {
-        setApiData(data)
-        setLoading(false)
-      })
-      .catch((err) => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await fetch(findDoctorsApi)
+        if (!res.ok) throw new Error('Failed to fetch departments.')
+        const data = await res.json()
+        setDepartments(data.data?.departments || [])
+      } catch (err) {
         setError(err.message)
+      }
+    }
+
+    const fetchDoctors = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch(doctorsApi)
+        if (!res.ok) throw new Error('Failed to fetch doctors.')
+        const data = await res.json()
+        setTranslations(data.data?.translations || {})
+        setDoctors(data.data?.doctors || [])
+      } catch (err) {
+        setError(err.message)
+      } finally {
         setLoading(false)
-      })
-  }, [findDoctorsApi])
+      }
+    }
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error: {error}</p>
-  if (!apiData?.data?.departments?.length) return <p>No departments found.</p>
+    fetchDepartments()
+    fetchDoctors()
+  }, [])
 
-  const departments = apiData.data.departments
+  const handleChange = (field, value) => {
+    if (field === 'search_by_Name') setSearchByName(value)
+    if (field === 'search_by_Department') setSearchByDepartment(value)
 
-  // Just for demo: Simulate doctors based on departments (until API provides doctors list)
-  const dummyDoctors = departments.map((dept, index) => ({
-    id: index + 1,
-    name: `Dr. ${dept.name}`,
-    department: dept.name
-  }))
+    // Optional input validation
+    setInputErrors((prev) => ({ ...prev, [field]: '' }))
+  }
 
-  const filteredDoctors = dummyDoctors.filter((doctor) => {
-    const matchesName = Search_by_Name
-      ? doctor.name.toLowerCase().includes(Search_by_Name.toLowerCase())
+  const filteredDoctors = doctors.filter((doctor) => {
+
+    // Check if the name matches the search input
+    const doctorName = doctor?.first_name + doctor?.last_name
+    const matchesName = search_by_Name
+      ? doctorName?.toLowerCase().includes(search_by_Name?.toLowerCase())
       : true
 
-    const matchesDept = Search_by_Department
-      ? doctor.department === Search_by_Department
+    // Check if the department matches the selected department
+    const matchesDept = search_by_Department
+      ? doctor.department.name === search_by_Department
       : true
-
     return matchesName && matchesDept
   })
+
+
+
+
+  if (error) return <p className="text-red-500">Error: {error}</p>
+  // Get translated department name
+  const getTranslatedContent = (item) => {
+    if (
+      !selectedLanguage ||
+      !item.translations ||
+      item.translations.length === 0
+    ) {
+      return {
+        name: item.name,
+        short_description: item.short_description,
+      };
+    }
+
+    // Find matching translation for current language
+    const translation = item.translations.find(
+      (t) => t.lang_code === selectedLanguage.lang_code
+    );
+
+
+    return {
+      name: translation?.name || item.name,
+      short_description:
+        translation?.short_description || item.short_description,
+    };
+  };
 
   return (
     <>
@@ -74,32 +130,34 @@ const Doctors = ({
                 text={getTranslation(
                   translations,
                   selectedLanguage,
-                  'Search_by_Department',
-                  'Search by Department'
+                  'Search_By_Department',
+                  'Search By Department'
                 )}
                 required={true}
               />
               <select
                 className="py-3 pr-[20px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-[1px] border-borderColor focus:!border-theme focus:outline-none focus:ring-0 text-text-sm md:text-sm lg:text-sm mt-1 lg:mt-2 w-full"
-                onChange={(e) => handleChange('Search_by_Department', e.target.value)}
-                value={Search_by_Department}
+                onChange={(e) => handleChange('search_by_Department', e.target.value)}
+                value={search_by_Department}
               >
                 <option value="">
-                  {getTranslation(translations, selectedLanguage, 'Search_by_Department', '--Search by Department--')}
+                  {getTranslation(translations, selectedLanguage, 'Search_By_Department', '--Search By Department--')}
                 </option>
-                {departments.map((dept) => {
-                  const translated = dept.translation?.find(t => t.lang_code === selectedLanguage)
-                  const displayName = translated?.name || dept.name
+
+                {/* Map through departments and create options */}
+                {departments?.map((item, index) => {
+                  const content = getTranslatedContent(item);
+
                   return (
-                    <option key={dept.id} value={dept.name}>
-                      {displayName}
+                    <option key={index} value={content.name}>
+                      {content.name}
                     </option>
                   )
                 })}
               </select>
-              {inputErrors?.Search_by_Department && (
+              {inputErrors?.search_by_Department && (
                 <p className="text-red-500 text-xs pt-[2px]">
-                  {inputErrors.Search_by_Department}
+                  {inputErrors.search_by_Department}
                 </p>
               )}
             </div>
@@ -110,68 +168,97 @@ const Doctors = ({
                 text={getTranslation(
                   translations,
                   selectedLanguage,
-                  'Search_by_Name',
-                  'Search by Name'
+                  'Search_By_Name',
+                  'Search By Name'
                 )}
                 required={true}
-                className="pb-2"
               />
               <UserAuthInput
-                onChange={(name, value) => handleChange('Search_by_Name', value)}
-                value={Search_by_Name}
+                className="py-3 pr-[20px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-[1px] border-borderColor focus:!border-theme focus:outline-none focus:ring-0 text-text-sm md:text-sm lg:text-sm mt-1 lg:mt-2 w-full"
+                onChange={(name, value) => handleChange('search_by_Name', value)}
+                value={search_by_Name}
                 type="text"
                 placeholder={getTranslation(
                   translations,
                   selectedLanguage,
-                  'Search_by_Name',
-                  'Search by Name'
+                  'Search_By_Name',
+                  'Search By Name'
                 )}
-                name="Search_by_Name"
+                name="Search_By_Name"
                 required={true}
               />
-              {inputErrors?.Search_by_Name && (
+              {inputErrors?.search_by_Name && (
                 <p className="text-red-500 text-xs pt-[2px]">
-                  {inputErrors.Search_by_Name}
+                  {inputErrors.search_by_Name}
                 </p>
               )}
             </div>
           </div>
         </div>
       </section>
+
       <Container>
-
         <SectionTitle className="text-center mt-10" text="Doctors" />
+        <MinTitle
+          className="text-center mt-2 w-96 mx-auto mb-5"
+          text="We have a team of experienced and qualified doctors who can provide you with the best possible care."
+        />
 
-        <MinTitle className="text-center mt-2 w-96 mx-auto mb-5" text="We have a team of experienced and qualified doctors who can provide you with the best possible care." />
 
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-5">
-          {filteredDoctors.length ? (
-            filteredDoctors.map((doctor) => {
-              return (
+        {loading  ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(visibleItems)].map((_, index) => (
+              <div
+                className="border-[1px] border-primary border-opacity-[0.1] "
+              >
+                <div className="aspect-[14/9] overflow-hodden rounded-lg bg-skeletonLoading animate-pulse max-h-[250px]">
+                  <img className="w-full h-[230px] object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center bg-skeletonLoading animate-pulse rounded-lg" />
+                </div>
+
+                <div className="p-4">
+                  <div className="name w-[80%] h-3 mt-6 rounded-lg bg-skeletonLoading animate-pulse"></div>
+                  <div className="name w-[40%] h-3 mt-2 rounded-lg bg-skeletonLoading animate-pulse"></div>
+                  <div className="category w-[50%] mt-6 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
+                </div>
+              </div>
+             ))} 
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-5">
+            {filteredDoctors.length ? (
+              filteredDoctors.slice(0, visibleItems).map((doctor, index) => (
                 <DoctorCard
-                  key={doctor.id}
-                  id={doctor.id}
-                  firstName={doctor.name.split(' ')[1]}
-                  lastName={doctor.name.split(' ')[0]}
+                  key={index}
+                  id={doctor.doctor_id}
+                  firstName={doctor.first_name}
+                  lastName={doctor.last_name}
                   department={doctor.department}
-                  image={doctor.image} // Assuming you have an image property
-                  defaultDoctorImg="/path/to/default/image.jpg" // Replace with your default image path
-                  socialNetworks={doctor.socialNetworks} // Assuming you have a socialNetworks property
+                  image={doctor.image}
+                  socialNetworks={doctor.socialNetworks}
                 />
-              )
-            })
-          ) : (
-            <p className="text-gray-500">No doctors match your search.</p>
-          )}
+              ))
+            ) : (
+              <p className="text-gray-500 col-span-full text-center">
+                No doctors match your search.
+              </p>
+            )}
+          </div>
+        )}
 
 
-
-        </div>
+        {filteredDoctors?.length > visibleItems && (
+          <div className="mt-4 text-center mx-auto">
+            <div className="inline-block pt-4">
+              <LoadingButton
+                className="inline-block"
+                loadingTime="1000"
+                text="Load More"
+                onClick={viewMoreDoctors}
+              />
+            </div>
+          </div>
+        )}
       </Container>
-
-
-      {/* Filtered Doctors List */}
-
     </>
   )
 }

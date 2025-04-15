@@ -11,6 +11,8 @@ const OurDepartment = ({ translations, department }) => {
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
+
+  
   // Animation
   useEffect(() => {
     AOS.init({
@@ -41,6 +43,7 @@ const OurDepartment = ({ translations, department }) => {
     const translation = item.translations.find(
       (t) => t.lang_code === selectedLanguage.lang_code
     );
+
 
     return {
       name: translation?.name || item.name,
@@ -81,6 +84,8 @@ const OurDepartment = ({ translations, department }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {department?.map((item, index) => {
                 const content = getTranslatedContent(item);
+                console.log(content);
+                
                 return (
                   <div
                     key={index}
