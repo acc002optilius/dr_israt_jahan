@@ -18,7 +18,7 @@ import { getTranslation } from "../../Utils/Translation/translationUtils";
 const googleValSitekey = "6LesUa8qAAAAAPuU_Aied1IqtR9_8BIQ9EmYasye";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { makeAppointmentApi } from "../../Api/Api";
+import { contactFormApi, makeAppointmentApi } from "../../Api/Api";
 
 const ContactForm = ({ translations, doctorsList }) => {
   const staticPhoneCodes = [
@@ -81,7 +81,7 @@ const ContactForm = ({ translations, doctorsList }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        makeAppointmentApi,
+        contactFormApi,
         {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -177,7 +177,7 @@ const ContactForm = ({ translations, doctorsList }) => {
         }`}
         text={status?.message || ""}
       />
-      <div className="grid lg:grid-cols-2 gap-3 md:gap-4">
+      <div className="grid lg:grid-cols-2 gap-2 md:gap-3">
         {/* First Name */}
         <div>
           <UserAuthInput
@@ -220,7 +220,25 @@ const ContactForm = ({ translations, doctorsList }) => {
             </p>
           )}
         </div>
-
+        {/* Email */}
+        <div>
+          <UserAuthInput
+            onChange={(name, value) => handleChange("email", value)}
+            value={formData.email}
+            type="text"
+            placeholder={`${getTranslation(
+              translations,
+              selectedLanguage,
+              "Email",
+              "Email"
+            )}`}
+            name="email"
+            required="true"
+          />
+          {inputErrors.email && (
+            <p className="text-red-500 text-xs pt-[2px]">{inputErrors.email}</p>
+          )}
+        </div>
         {/* Phone Number */}
         <div className="flex flex-col">
           <div className="flex items-center relative">
@@ -307,32 +325,14 @@ const ContactForm = ({ translations, doctorsList }) => {
           )}
         </div>
 
-        {/* Email */}
-        <div>
-          <UserAuthInput
-            onChange={(name, value) => handleChange("email", value)}
-            value={formData.email}
-            type="text"
-            placeholder={`${getTranslation(
-              translations,
-              selectedLanguage,
-              "Email",
-              "Email"
-            )}`}
-            name="email"
-            required="true"
-          />
-          {inputErrors.email && (
-            <p className="text-red-500 text-xs pt-[2px]">{inputErrors.email}</p>
-          )}
-        </div>
+
 
 
 
       </div>
 
       {/* Message Box */}
-      <div className="mt-4">
+      <div className="mt-2">
         <textarea
           onChange={(e) => handleChange("message", e.target.value)}
           name="message"
@@ -352,7 +352,7 @@ const ContactForm = ({ translations, doctorsList }) => {
       </div>
 
       {/* Google Verification */}
-      <div className="mt-4">
+      <div className="mt-2">
         <ReCAPTCHA
           sitekey={googleValSitekey}
           onChange={(googleVal) => setGoogleVal(googleVal)}
@@ -362,7 +362,7 @@ const ContactForm = ({ translations, doctorsList }) => {
       {/* Submit Button */}
       <div className="inline-block">
         <SubmitButton
-          className="w-full mt-4 md:mt-6 !border-none"
+          className="w-full mt-2 md:mt-2 !border-none"
           onClick={handleSubmit}
           type="button"
           loadingTime="2000"

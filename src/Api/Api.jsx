@@ -25,3 +25,9 @@ export const subscriptionApi = `${api}/${version}/subscribe`;
 //Contact Page Api (GET)
 export const contactPageApi = `${api}/${version}/contact`;
 
+//Contact Form Data Api (GET)
+export const contactFormApi = `${api}/${version}/service-query/submit`;
+
+//Single Department Api (GET)
+export const singleDepartmentApi = `${api}/${version}/department?slug`;
+
