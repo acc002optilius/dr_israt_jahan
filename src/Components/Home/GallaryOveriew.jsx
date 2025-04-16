@@ -145,7 +145,7 @@ const GalleryOverview = ({ translations, data }) => {
   };
 
   return (
-    <div className="section_gap bg-[#f9f9ff]">
+    <div className="section_gap ">
       <Container>
         <div
           className="text-center mb-4"

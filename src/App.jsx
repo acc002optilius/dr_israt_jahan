@@ -53,9 +53,10 @@ function App() {
     };
     fetchData();
   }, []);
+
+
   return (
     <div className="relative">
-      {/* {isLoading && <Preloader />} */}
       <Header />
       <ToastContainer
         position="top-right"

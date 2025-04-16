@@ -23,9 +23,10 @@ import Testimonial from "../Components/Home/Testimonial";
 import CaseStudisOverview from "../Components/Home/CaseStudisOverview";
 import GallaryOveriew from "../Components/Home/GallaryOveriew";
 import BlogsOverview from "../Components/Home/BlogsOverview";
+import Preloader from "../Utils/Preloader";
 
 const Home = () => {
-  const { setIsLoading } = useLoading();
+  const [isLoading , setIsLoading] = useState(true);
   const [homeContentData, setHomeContentData] = useState([]);
   const [bannerData, setBannerData] = useState();
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ const Home = () => {
 
   return (
     <div className="">
+            {isLoading && <Preloader />}
       <Banner
         bannerData={bannerData}
         translations={homeContentData.translations}
