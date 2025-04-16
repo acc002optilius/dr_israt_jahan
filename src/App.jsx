@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { setInitialLanguage } from "./Redux/Slices/languageSlice";
 import { setSiteCommonData } from "./Redux/Slices/siteCommonData";
+import Newsletter from "./Components/Footer/Newsletter";
+import Footer from "./Components/Footer/Footer";
 
 
 function AppWrapper() {
@@ -51,9 +53,10 @@ function App() {
     };
     fetchData();
   }, []);
+
+
   return (
     <div className="relative">
-      {/* {isLoading && <Preloader />} */}
       <Header />
       <ToastContainer
         position="top-right"
@@ -70,6 +73,8 @@ function App() {
       />
       <ScrollToTop />
       <Outlet />
+      <Newsletter/>
+      <Footer/>
     </div>
   );
 }

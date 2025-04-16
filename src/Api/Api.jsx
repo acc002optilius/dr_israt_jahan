@@ -20,3 +20,7 @@ export const findDoctorsApi = `${api}/${version}/doctors/find`;
 
 //Doctors Api (GET)
 export const doctorsApi = `${api}/${version}/doctors`;
+
+//Subscription Api (GET)
+export const subscriptionApi = `${api}/${version}/subscribe`;
+

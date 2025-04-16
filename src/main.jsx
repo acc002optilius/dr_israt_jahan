@@ -15,6 +15,7 @@ import App from "./App.jsx";
 import { store } from "./Redux/Store/store.js";
 
 import Doctors from "./Pages/Doctors.jsx";
+import SingleDepartment from "./Pages/SingleDepartment.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route path="/" element={<Home />} />
         {/* <Route path="/contact" element={<Contact />} /> */}
+        <Route path="/contact" element={<Contact />} />
+        {/* Single Service */}
+        <Route path="/service/:slug" element={<Contact />} />
+        {/* Single Service */}
+        <Route path="/department/:slug" element={<SingleDepartment />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="*" element={<Error />} />
       </Route>

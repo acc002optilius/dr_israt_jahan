@@ -26,10 +26,10 @@ import htmlTruncate from "html-truncate";
 const BlogsOverview = ({ translations, data }) => {
   const [visibleItems, setVisibleItems] = useState(8);
   const navigate = useNavigate();
-  const viewAllDoctors = () => {
+  const viewAllBlogs = () => {
     console.log("ok");
 
-    navigate("/doctors");
+    navigate("/blogs");
   };
 
   const selectedLanguage = useSelector(
@@ -136,7 +136,7 @@ const BlogsOverview = ({ translations, data }) => {
                         socialNetworks={item?.social_networks}
                         thumbnail={item?.thumbnail}
                         category={item?.category}
-                        cardAnimation="zoom-out-up"
+                        cardAnimation="zoom-in"
                         displayDate={item.display_date}
                       />
                     </SwiperSlide>
@@ -151,8 +151,8 @@ const BlogsOverview = ({ translations, data }) => {
                 <LoadingButton
                   className="inline-block"
                   loadingTime="1000"
-                  text="View All Doctors"
-                  onClick={viewAllDoctors}
+                  text="View All Blogs"
+                  onClick={viewAllBlogs}
                 />
               </div>
             </div>
