@@ -23,7 +23,6 @@ const BlogCard = ({
   title,
   thumbnail,
   cardAnimation,
-  key,
   slug,
   description,
   category,
@@ -78,7 +77,6 @@ const BlogCard = ({
     <div
       data-aos={`${cardAnimation}`}
       data-aos-delay="300"
-      key={key}
       className="group relative   transition-all duration-300 h-full flex flex-col border-[1px] border-borderColor rounded-lg"
     >
       <MinTitle

@@ -19,8 +19,8 @@ const googleValSitekey = "6LesUa8qAAAAAPuU_Aied1IqtR9_8BIQ9EmYasye";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { contactFormApi, makeAppointmentApi } from "../../Api/Api";
-
-const ContactForm = ({ translations, doctorsList }) => {
+import { GrSend } from "react-icons/gr";
+const ContactForm = ({ translations}) => {
   const staticPhoneCodes = [
     { name: "Bangladesh", phonecode: "880", iso2: "bd" },
     { name: "United States", phonecode: "1", iso2: "us" },
@@ -63,14 +63,9 @@ const ContactForm = ({ translations, doctorsList }) => {
     lastName: "",
     phoneNumber: "",
     phoneCode: "",
-    email : "" ,
+    email: "",
     message: "",
   });
-
-
-
-
-
 
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
@@ -127,9 +122,7 @@ const ContactForm = ({ translations, doctorsList }) => {
             firstName: errorMessages.first_name
               ? errorMessages.first_name[0]
               : "",
-            lastName: errorMessages.last_name
-              ? errorMessages.last_name[0]
-              : "",
+            lastName: errorMessages.last_name ? errorMessages.last_name[0] : "",
             email: errorMessages.email ? errorMessages.email[0] : "",
             phoneNumber: errorMessages.phone ? errorMessages.phone[0] : "",
             message: errorMessages.message ? errorMessages.message[0] : "",
@@ -167,8 +160,6 @@ const ContactForm = ({ translations, doctorsList }) => {
     setIsPhoneDropdownOpen(false);
   };
 
-
-
   return (
     <div className="w-full">
       <MinTitle
@@ -185,11 +176,11 @@ const ContactForm = ({ translations, doctorsList }) => {
             value={formData.firstName}
             type="text"
             placeholder={getTranslation(
-                translations,
-                selectedLanguage,
-                "First_Name",
-                "First Name"
-              )}
+              translations,
+              selectedLanguage,
+              "First_Name",
+              "First Name *"
+            )}
             name="firstName"
             required="true"
           />
@@ -206,11 +197,11 @@ const ContactForm = ({ translations, doctorsList }) => {
             value={formData.lastName}
             type="text"
             placeholder={getTranslation(
-                translations,
-                selectedLanguage,
-                "Last_Name",
-                "Last Name"
-              )}
+              translations,
+              selectedLanguage,
+              "Last_Name",
+              "Last Name"
+            )}
             name="lastName"
             required="true"
           />
@@ -311,7 +302,7 @@ const ContactForm = ({ translations, doctorsList }) => {
                   translations,
                   selectedLanguage,
                   "Phone_Number",
-                  "Phone Number"
+                  "Phone Number *"
                 )}`}
                 name="phoneNumber"
                 required="true"
@@ -324,11 +315,6 @@ const ContactForm = ({ translations, doctorsList }) => {
             </p>
           )}
         </div>
-
-
-
-
-
       </div>
 
       {/* Message Box */}
@@ -339,8 +325,8 @@ const ContactForm = ({ translations, doctorsList }) => {
           placeholder={getTranslation(
             translations,
             selectedLanguage,
-            "Message_Input_Placeholder",
-            "Describe your case or needs"
+            "Message",
+            "Message *"
           )}
           rows="3"
           className="text-text-sm md:text-sm lg:text-sm w-full mt-1 lg:mt-2 rounded-md border-borderColor border-[1px] p-3 focus:!border-theme !ring-0 focus:!ring-0 focus:!outline-none"
@@ -352,28 +338,31 @@ const ContactForm = ({ translations, doctorsList }) => {
       </div>
 
       {/* Google Verification */}
-      <div className="mt-2">
-        <ReCAPTCHA
-          sitekey={googleValSitekey}
-          onChange={(googleVal) => setGoogleVal(googleVal)}
-        />
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
+        <div className="mt-2">
+          <ReCAPTCHA
+            sitekey={googleValSitekey}
+            onChange={(googleVal) => setGoogleVal(googleVal)}
+          />
+        </div>
 
-      {/* Submit Button */}
-      <div className="inline-block">
-        <SubmitButton
-          className="w-full mt-2 md:mt-2 !border-none"
-          onClick={handleSubmit}
-          type="button"
-          loadingTime="2000"
-          text={getTranslation(
-            translations,
-            selectedLanguage,
-            "Send_Message",
-            "Send Message"
-          )}
-          disabled={!googleVal}
-        />
+        {/* Submit Button */}
+        <div className="inline-block">
+          <SubmitButton
+            className="w-full mt-2 md:mt-2 !border-none"
+            onClick={handleSubmit}
+            icon={<GrSend />}
+            type="button"
+            loadingTime="2000"
+            text={getTranslation(
+              translations,
+              selectedLanguage,
+              "Send_Message",
+              "Send Message"
+            )}
+            disabled={!googleVal}
+          />
+        </div>
       </div>
     </div>
   );

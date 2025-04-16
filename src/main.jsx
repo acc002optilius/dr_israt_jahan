@@ -16,6 +16,8 @@ import { store } from "./Redux/Store/store.js";
 import Contact from "./Pages/Contact.jsx";
 import Doctors from "./Pages/Doctors.jsx";
 import SingleDepartment from "./Pages/SingleDepartment.jsx";
+import Blog from "./Pages/Blog.jsx";
+import Gallery from "./Pages/Gallery.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +32,8 @@ const router = createBrowserRouter(
         <Route path="/department/:slug" element={<SingleDepartment />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/doctors" element={<Doctors />} />
+        <Route path="/blogs" element={<Blog />} />
+        <Route path="/gallery" element={<Gallery />} />
 
         <Route path="*" element={<Error />} />
       </Route>

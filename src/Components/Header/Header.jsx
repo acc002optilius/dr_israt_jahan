@@ -46,9 +46,19 @@ const Header = () => {
         { name: "Laboratory", href: "#" },
       ],
     },
-    { name: "Shop", href: "#", hasDropdown: false },
-    { name: "Blog", href: "#", hasDropdown: false },
+    // { name: "Blog", href: "/blogs", hasDropdown: false },
     { name: "Contact", href: "/contact", hasDropdown: false },
+    {
+      name: "More",
+      href: "#",
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Blog", href: "/blogs" },
+        { name: "Galarry", href: "/gallery" },
+        { name: "Case Studies", href: "/case-studies" },
+        { name: "FAQ's", href: "faqs" },
+      ],
+    },
   ];
 
   const toggleDropdown = (itemName) => {
@@ -129,13 +139,14 @@ const Header = () => {
                           }`}
                         >
                           {item.dropdownItems?.map((dropdownItem) => (
-                            <a
+                            <div
+                            onClick={() => handleGoPage(dropdownItem.href)}
                               key={dropdownItem.name}
-                              href={dropdownItem.href}
-                              className="dropdown-link block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+
+                              className="dropdown-link block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors cursor-pointer"
                             >
                               {dropdownItem.name}
-                            </a>
+                            </div>
                           ))}
                         </div>
                       )}
