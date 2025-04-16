@@ -48,7 +48,7 @@ const Header = () => {
     },
     { name: "Shop", href: "#", hasDropdown: false },
     { name: "Blog", href: "#", hasDropdown: false },
-    { name: "Contact", href: "#", hasDropdown: false },
+    { name: "Contact", href: "/contact", hasDropdown: false },
   ];
 
   const toggleDropdown = (itemName) => {

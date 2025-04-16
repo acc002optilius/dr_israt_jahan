@@ -28,6 +28,7 @@ const router = createBrowserRouter(
         {/* Single Service */}
         <Route path="/department/:slug" element={<SingleDepartment />} />
         <Route path="/doctors" element={<Doctors />} />
+
         <Route path="*" element={<Error />} />
       </Route>
     </>

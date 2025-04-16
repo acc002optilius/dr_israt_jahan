@@ -22,3 +22,6 @@ export const findDoctorsApi = `${api}/${version}/doctors/find`;
 //Subscription Api (GET)
 export const subscriptionApi = `${api}/${version}/subscribe`;
 
+//Contact Page Api (GET)
+export const contactPageApi = `${api}/${version}/contact`;
+
