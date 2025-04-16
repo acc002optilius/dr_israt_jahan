@@ -13,7 +13,7 @@ import Error from "./Pages/Error.jsx";
 import Home from "./Pages/Home.jsx";
 import App from "./App.jsx";
 import { store } from "./Redux/Store/store.js";
-import Contact from "./Pages/Contact.jsx";
+
 import Doctors from "./Pages/Doctors.jsx";
 
 const router = createBrowserRouter(
@@ -21,7 +21,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<App />}>
         <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
+        {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/doctors" element={<Doctors />} />
         <Route path="*" element={<Error />} />
       </Route>
