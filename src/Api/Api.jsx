@@ -24,3 +24,6 @@ export const doctorsApi = `${api}/${version}/doctors`;
 //Subscription Api (GET)
 export const subscriptionApi = `${api}/${version}/subscribe`;
 
+//Contact Page Api (GET)
+export const contactPageApi = `${api}/${version}/contact`;
+
