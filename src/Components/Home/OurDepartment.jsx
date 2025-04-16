@@ -7,7 +7,12 @@ import MidTitle from "../../Layout/Title/MidTitle";
 import { api } from "../../Api/Api";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useNavigate } from 'react-router-dom';
+
 const OurDepartment = ({ translations, department }) => {
+
+  const navigate = useNavigate();
+  
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
@@ -22,6 +27,7 @@ const OurDepartment = ({ translations, department }) => {
   }, []);
   //   Go Single DepartMent Page
   const handleGoSingleDepartMentPage = (slug) => {
+    navigate(`/department/${slug}`);
     console.log(slug);
   };
 

@@ -209,6 +209,7 @@ const Doctors = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[...Array(visibleItems)].map((_, index) => (
               <div
+              key={index}
                 className="border-[1px] border-primary border-opacity-[0.1] "
               >
                 <div className="aspect-[14/9] overflow-hodden rounded-lg bg-skeletonLoading animate-pulse max-h-[250px]">

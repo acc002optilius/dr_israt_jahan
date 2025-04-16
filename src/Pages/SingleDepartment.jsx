@@ -1,8 +1,12 @@
 import React from 'react'
 
+
 const SingleDepartment = () => {
+  
   return (
-    <div>SingleDepartment</div>
+    <div>
+      Lorem ipsum dolor sit.
+    </div>
   )
 }
 
