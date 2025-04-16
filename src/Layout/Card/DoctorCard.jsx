@@ -20,7 +20,7 @@ const DoctorCard = ({
   socialNetworks = {},
   image,
   cardAnimation,
-
+  key,
 }) => {
 
 
@@ -64,7 +64,7 @@ const DoctorCard = ({
   return (
     <div
       data-aos={`${cardAnimation}`} data-aos-duration="2000" data-aos-delay="300"
-
+      key={key}
       className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
     >
       {/* Image with overlay effect */}
