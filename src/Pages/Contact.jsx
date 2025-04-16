@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Container from "../Layout/Container";
 import { TbEyeCheck, TbMailFilled, TbTargetArrow } from "react-icons/tb";
-import { FaHandHoldingMedical, FaMapLocationDot, FaPhone, FaPhoneFlip } from "react-icons/fa6";
+import {
+  FaHandHoldingMedical,
+  FaMapLocationDot,
+  FaPhone,
+  FaPhoneFlip,
+} from "react-icons/fa6";
 import MinTitle from "../Layout/Title/MinTitle";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -25,6 +30,7 @@ import { AiOutlinePinterest, AiOutlineTikTok } from "react-icons/ai";
 import { FiMapPin } from "react-icons/fi";
 import { LuTimerOff } from "react-icons/lu";
 import { IoMdLocate } from "react-icons/io";
+import LocationMap from "../Components/Contact/LocationMap";
 const Contact = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [translations, setTranslatios] = useState({});
@@ -48,6 +54,7 @@ const Contact = () => {
 
     opening_hours,
   } = contactData;
+
   const SocialContactData = [
     {
       title: "Linkedin",
@@ -131,105 +138,108 @@ const Contact = () => {
       setIsLoading(false);
     };
   }, []);
-  console.log(translations);
 
   return (
-    <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-      <Container>
-        <SectionTitle
-          text={getTranslation(
-            translations,
-            selectedLanguage,
-            "Contact_Us",
-            "Contact Us"
-          )}
-          className="text-center !text-primary"
-        />
-        <div className=" grid grid-cols-1 gap-24 md:grid-cols-12">
-          <div className="col-span-7">
-            <ContactForm />
-          </div>
-          <div className="col-span-5">
-            <ul className="mt-2 md:mt-5 ">
-              {/* Address */}
-              <li className="pb-1 md:pb-5">
-                <a
-                  href={`${map_location}`}
-                  target="_blank"
-                  className="relative group"
-                >
-                  <div className="flex gap-4 items-center relative inline-block">
-                    <span className="text-theme text-2xl">
-                    <IoMdLocate />
-                    </span>
-                    <MinTitle
-                      className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
-                      text={address}
-                    />
-                  </div>
-                </a>
-              </li>
-              {/* Phone */}
-              <li className="pb-1 md:pb-5">
-                <a
-                  href={`tel:${phone}`}
-                  target="_blank"
-                  className="relative group"
-                >
-                  <div className="flex gap-4 items-center relative inline-block">
-                    <span className="text-theme text-2xl">
-                    <MdPhoneEnabled />
-                    </span>
-                    <MinTitle
-                      className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
-                      text={phone}
-                    />
-                  </div>
-                </a>
-              </li>
-              {/* Email */}
-              <li className="pb-1 md:pb-5">
-                <a
-                  href={`mailto:${email}`}
-                  target="_blank"
-                  className="relative group"
-                >
-                  <div className="flex gap-4 items-center relative inline-block">
-                    <span className="text-theme text-2xl">
-                    <TbMailFilled />
-                    </span>
-                    <MinTitle
-                      className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
-                      text={email}
-                    />
-                  </div>
-                </a>
-              </li>
-
-            </ul>
-
-            {/* Social Data */}
-            {dynamicSocialContactData?.length > 0 && (
-              <div className="">
-                <div className="flex flex-wrap items-center gap-1 sm:gap-2 md:gap-3 lg:gap-2 mt-3 sm:mt-2 lg:mt-4 ">
-                  {dynamicSocialContactData.map((item, index) => (
-                    <a
-                      key={index}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={item.link}
-                      className="text-sm md:text-sm lg:text-base p-1 md:p-1 lg:p-[10px] bg-transparent hover:bg-theme  text-theme hover:text-secondary border-[1px] border-theme hover:translate-y-[-10%] duration-300 rounded-full !cursor-pointer"
-                    >
-                      {item.icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
+    <>
+      <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
+        <Container>
+          <SectionTitle
+            text={getTranslation(
+              translations,
+              selectedLanguage,
+              "Contact_Us",
+              "Contact Us"
             )}
+            className="text-center !text-primary"
+          />
+          <div className=" grid grid-cols-1 gap-8 sm:gap-12 md:gap-24 md:grid-cols-12 pt-4">
+            <div className="md:col-span-7">
+              <ContactForm translations={translations}/>
+            </div>
+            <div className="md:col-span-5">
+              <ul className="mt-2 md:mt-5 ">
+                {/* Address */}
+                <li className="pb-3 md:pb-6">
+                  <a
+                    href={`${map_location}`}
+                    target="_blank"
+                    className="relative group"
+                  >
+                    <div className="flex gap-4 items-center relative inline-block">
+                      <span className="text-theme text-2xl">
+                        <IoMdLocate />
+                      </span>
+                      <MinTitle
+                        className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
+                        text={address}
+                      />
+                    </div>
+                  </a>
+                </li>
+                {/* Email */}
+                <li className="pb-3 md:pb-6">
+                  <a
+                    href={`mailto:${email}`}
+                    target="_blank"
+                    className="relative group"
+                  >
+                    <div className="flex gap-4 items-center relative inline-block">
+                      <span className="text-theme text-2xl">
+                        <TbMailFilled />
+                      </span>
+                      <MinTitle
+                        className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
+                        text={email}
+                      />
+                    </div>
+                  </a>
+                </li>
+                {/* Phone */}
+                <li className="pb-3 md:pb-6">
+                  <a
+                    href={`tel:${phone}`}
+                    target="_blank"
+                    className="relative group"
+                  >
+                    <div className="flex gap-4 items-center relative inline-block">
+                      <span className="text-theme text-2xl">
+                        <MdPhoneEnabled />
+                      </span>
+                      <MinTitle
+                        className="text-primary text-md duration-300 inline-block group-hover:text-theme font-normal"
+                        text={phone}
+                      />
+                    </div>
+                  </a>
+                </li>
+              </ul>
+
+              {/* Social Data */}
+              {dynamicSocialContactData?.length > 0 && (
+                <div className="">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-2 md:gap-3 lg:gap-2  ">
+                    {dynamicSocialContactData.map((item, index) => (
+                      <a
+                        key={index}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={item.link}
+                        className="text-sm md:text-sm lg:text-base p-2 md:p-2 lg:p-[10px] bg-transparent hover:bg-theme  text-theme hover:text-secondary border-[1px] border-theme hover:translate-y-[-10%] duration-300 rounded-full !cursor-pointer"
+                      >
+                        {item.icon}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        </Container>
+      </div>
+        <div className="">
+          <LocationMap map={map_location} />
         </div>
-      </Container>
-    </div>
+    </>
   );
 };
 

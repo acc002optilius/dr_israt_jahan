@@ -31,3 +31,9 @@ export const contactFormApi = `${api}/${version}/service-query/submit`;
 //Single Department Api (GET)
 export const singleDepartmentApi = `${api}/${version}/department?slug`;
 
+//All Blogs Api Api (GET)
+export const blogsApi = `${api}/${version}/blogs`;
+
+//All Gallery Api Api (GET)
+export const galleryApi = `${api}/${version}/gallery`;
+
