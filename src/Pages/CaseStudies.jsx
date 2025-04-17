@@ -3,7 +3,7 @@ import SectionTitle from "../Layout/Title/SectionTitle";
 import Container from "../Layout/Container";
 import { useSelector } from "react-redux";
 import MinTitle from "../Layout/Title/MinTitle";
-import { api } from "../Api/Api";
+import { api, caseStudiesApi } from "../Api/Api";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,14 @@ import axios from "axios";
 import { blogsApi } from "../Api/Api";
 import BlogCard from "../Layout/Card/BlogCard";
 import { IoReloadSharp } from "react-icons/io5";
+import CaseStudisCard from "../Layout/Card/CaseStudisCard";
 
-const Blog = () => {
+const CaseStudies = () => {
   const [visibleItems, setVisibleItems] = useState(12);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [translations, setTranslations] = useState({});
-  const [categories, setCategories] = useState([]);
+  const [department, setDepartment] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
   const selectedLanguage = useSelector(
@@ -29,19 +30,23 @@ const Blog = () => {
     const fetchAllData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(blogsApi);
-        
+        const response = await axios.get(caseStudiesApi);
+        console.log(response);
+
         setTranslations(response.data.data.translations || {});
-        setData(response.data.data?.blogs || []);
-        
+        setData(response.data.data?.case_studies || []);
+
         // Extract unique categories from blogs
-        const uniqueCategories = [];
-        response.data.data?.blogs?.forEach(blog => {
-          if (blog.category && !uniqueCategories.some(cat => cat.slug === blog.category.slug)) {
-            uniqueCategories.push(blog.category);
+        const uniqueDepartment = [];
+        response.data.data?.case_studies?.forEach((item) => {
+          if (
+            item.department &&
+            !uniqueDepartment.some((cat) => cat.slug === item.department.slug)
+          ) {
+            uniqueDepartment.push(item.department);
           }
         });
-        setCategories(uniqueCategories);
+        setDepartment(uniqueDepartment);
       } catch (err) {
         console.log(err);
       } finally {
@@ -68,17 +73,21 @@ const Blog = () => {
     if (!category || !category.translations || !selectedLanguage) {
       return category?.name || "";
     }
-    
+
     const translation = category.translations.find(
       (t) => t.lang_code === selectedLanguage.lang_code
     );
-    
+
     return translation?.name || category.name || "";
   };
 
   // Get translated content for blog items
   const getTranslatedContent = (item) => {
-    if (!selectedLanguage || !item.translations || item.translations.length === 0) {
+    if (
+      !selectedLanguage ||
+      !item.translations ||
+      item.translations.length === 0
+    ) {
       return {
         title: item.title,
         description: item.description,
@@ -109,8 +118,8 @@ const Blog = () => {
   };
 
   // Filter blogs by selected category
-  const filteredBlogs = selectedCategory
-    ? data.filter(blog => blog.category?.slug === selectedCategory)
+  const filteredCasestudy = selectedCategory
+    ? data.filter((item) => item.department?.slug === selectedCategory)
     : data;
 
   return (
@@ -120,17 +129,17 @@ const Blog = () => {
           <div className="" data-aos="fade-in">
             <SectionTitle
               className="!text-center"
-              text={getTranslation("Latest_Blogs", "Latest Blogs")}
+              text={getTranslation("Case_Study", "Case Study")}
             />
             <MinTitle
               className="!text-center w-full sm:w-[50%] text-primary m-auto py-2"
               text={getTranslation(
-                "Blog_Page_Latest_Blogs_included_section_desc",
-                "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers."
+                "Case_Study_home_included_section_desc",
+                "Case Studies That Inspire Confidence"
               )}
             />
           </div>
-          
+
           {/* Category Filter */}
           <div className="flex justify-end pt-6">
             <select
@@ -142,67 +151,63 @@ const Blog = () => {
               }}
             >
               <option value="">
-                {getTranslation("Select_Blog_Category", "Select Blog Category")}
+                {getTranslation("Select_By_Department", "Select By Department")}
               </option>
-              {categories.map((category) => (
-                <option key={category.slug} value={category.slug}>
-                  {getTranslatedCategoryName(category)}
+              {department.map((item) => (
+                <option key={item.slug} value={item.slug}>
+                  {getTranslatedCategoryName(item)}
                 </option>
               ))}
             </select>
           </div>
-          
+
           <div data-aos="fade-up" className="pt-4">
             <div className="">
               {isLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                   {[...Array(visibleItems)].map((_, index) => (
                     <div
+                      data-aos="zoom-out-up"
+
                       key={index}
-                      className="border-[1px] border-primary border-opacity-[0.2] rounded-lg"
+                      className="border-[1px] aspect-[8/8] border-primary border-opacity-[0.2]  bg-skeletonLoading bg-opacity-[0.4] animate-pulse relative"
                     >
-                      <div className="aspect-[12/9] overflow-hidden rounded-lg bg-skeletonLoading animate-pulse max-h-[300px]">
+                      {/* <div className=" overflow-hidden rounded-lg bg-skeletonLoading animate-pulse max-h-[300px]">
                         <div className="w-full h-full bg-skeletonLoading animate-pulse rounded-t-lg" />
-                      </div>
-                      <div className="p-4 py-6">
+                      </div> */}
+                      <div className="p-4 py-6 absolute bottom-0 left-0 w-full">
                         <div className="category w-[40%] h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
                         <div className="name w-[80%] h-3 mt-6 rounded-lg bg-skeletonLoading animate-pulse"></div>
                         <div className="name w-[40%] h-3 mt-2 rounded-lg bg-skeletonLoading animate-pulse"></div>
-                        <div className="description">
-                          <div className="category w-full mt-6 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
-                          <div className="category w-[50%] mt-2 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
-                          <div className="category w-ful mt-2 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
-                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                  {filteredBlogs?.slice(0, visibleItems).map((item, index) => {
-                    const content = getTranslatedContent(item);
-                    const categoryName = getTranslatedCategoryName(item.category);
-                    
-                    return (
-                      <BlogCard
-                        key={index}
-                        title={content?.title}
-                        slug={item?.slug}
-                        description={content?.description}
-                        socialNetworks={item?.social_networks}
-                        thumbnail={item?.thumbnail}
-                        category={{ ...item.category, name: categoryName }}
-                        cardAnimation="zoom-in"
-                        displayDate={item.display_date}
-                      />
-                    );
-                  })}
+                  {filteredCasestudy
+                    ?.slice(0, visibleItems)
+                    .map((item, index) => {
+                      const content = getTranslatedContent(item);
+                      // const department = getTranslatedCategoryName(item.category);
+
+                      return (
+                        <CaseStudisCard
+                          title={content?.title}
+                          slug={item?.slug}
+                          shortDesc={content?.description}
+                          socialNetworks={item?.social_networks}
+                          image={item?.thumbnail}
+                          department={item?.department}
+                        />
+                      );
+                    })}
                 </div>
               )}
             </div>
           </div>
-          
-          {filteredBlogs?.length > visibleItems && (
+
+          {filteredCasestudy?.length > visibleItems && (
             <div className="mt-4 text-center mx-auto">
               <div className="inline-block pt-4">
                 <LoadingButton
@@ -221,4 +226,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default CaseStudies;
