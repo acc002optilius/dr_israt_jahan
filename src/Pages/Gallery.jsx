@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import SectionTitle from "../Layout/Title/SectionTitle";
 import Container from "../Layout/Container";
 import { useSelector } from "react-redux";
@@ -50,7 +50,7 @@ const Gallery = () => {
   }, []);
 
   const handlLoadMore = () => {
-    setVisibleItems((prev) => prev + visibleItems);
+    setVisibleItems((prev) => prev + 12); // Fixed to increment by 12 each time
   };
 
   // Get translation for a specific key
@@ -77,22 +77,21 @@ const Gallery = () => {
     return translation ? translation.caption : imageData.caption || "";
   };
 
-  // Initialize Fancybox with proper captions
+  // Initialize Fancybox properly
   useEffect(() => {
-    if (data.length > 0) {
-      Fancybox.bind("[data-fancybox]", {
-        caption: (fancybox, slide) => {
-          const imgIndex = slide.index;
-          const imageData = data[imgIndex];
-          return getImageCaption(imageData);
-        },
-      });
-    }
+    Fancybox.bind("[data-fancybox='gallery']", {
+      caption: (fancybox, slide) => {
+        const imgIndex = slide.index;
+        const imageData = data[imgIndex];
+        return getImageCaption(imageData);
+      },
+    });
 
     return () => {
-      Fancybox.destroy();
+      Fancybox.unbind("[data-fancybox='gallery']");
+      Fancybox.close();
     };
-  }, []); // Re-initialize when data or language changes
+  }, [data, selectedLanguage]); // Re-initialize when data or language changes
 
   return (
     <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
@@ -121,50 +120,47 @@ const Gallery = () => {
           {isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {[...Array(visibleItems)].map((_, index) => (
-                <div className="aspect-[4/4] overflow-hodden  bg-skeletonLoading animate-pulse">
-                  <img className="w-full h-full object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center bg-skeletonLoading animate-pulse rounded-t-lg" />
+                <div key={index} className="aspect-[4/4] overflow-hidden bg-skeletonLoading animate-pulse rounded-lg">
+                  <div className="w-full h-full bg-skeletonLoading animate-pulse rounded-lg" />
                 </div>
               ))}
             </div>
           ) : (
-            <div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
-              // data-aos="fade-up"
-              // data-aos-duration="500"
-              // data-aos-delay="200"
-            >
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {data?.slice(0, visibleItems).map((item, index) => (
-                <a
-                  key={index}
-                  href={`${api}/${item.image}`}
-                  data-fancybox="gallery"
-                  data-caption={getImageCaption(item)}
-                  className="aspect-[4/4] block"
-                >
-                  <img
-                    src={`${api}/${item.image}`}
-                    alt={getImageCaption(item)}
-                    className="w-full h-full object-cover"
-                  />
-                </a>
+                <div key={index} className="group aspect-[4/4] overflow-hidden rounded-lg">
+                  <a
+                    href={`${api}/${item.image}`}
+                    data-fancybox="gallery"
+                    data-caption={getImageCaption(item)}
+                    className="block object-fill w-full h-full"
+                  >
+                    <img
+                      src={`${api}/${item.image}`}
+                      alt={getImageCaption(item)}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+                </div>
               ))}
             </div>
           )}
         </div>
 
         {data?.length > visibleItems && (
-            <div className="mt-4 text-center mx-auto">
-              <div className="inline-block pt-4">
-                <LoadingButton
-                  className="inline-block"
-                  loadingTime="1000"
-                  text="Load More"
-                  icon={<IoReloadSharp />}
-                  onClick={handlLoadMore}
-                />
-              </div>
+          <div className="mt-4 text-center mx-auto">
+            <div className="inline-block pt-4">
+              <LoadingButton
+                className="inline-block"
+                loadingTime="1000"
+                text="Load More"
+                icon={<IoReloadSharp />}
+                onClick={handlLoadMore}
+              />
             </div>
-          )}
+          </div>
+        )}
       </Container>
     </div>
   );
