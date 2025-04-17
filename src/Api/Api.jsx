@@ -55,3 +55,12 @@ export const aboutUsApi = `${api}/${version}/about-us`;
 // All Departments Api (GET)
 export const allDepartments = `${api}/${version}/departments`;
 
+// CMO Information Api (GET)
+export const cmoInfoApi = `${api}/${version}/home/chief/information`;
+
+// Privacy Policy Page Content  Api (GET)
+export const privacyPolicyPageContentApi = `${api}/${version}/page/content?slug=privacy-policy`;
+
+// Terms & Condition Page Content  Api (GET)
+export const termConditionPageContentApi = `${api}/${version}/page/content?slug=terms-conditions`;
+

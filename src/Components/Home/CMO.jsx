@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../../Layout/Container";
 import cmoImg from "../../assets/cmoImg.png";
 import SectionTitle from "../../Layout/Title/SectionTitle";
@@ -20,7 +20,14 @@ import { AiOutlineTikTok } from "react-icons/ai";
 import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import axios from "axios";
+import { api, cmoInfoApi } from "../../Api/Api";
 const CMO = () => {
+  const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [translations, setTranslations] = useState({});
+  const [socialLinks, setSocialLinks] = useState({});
+
   useEffect(() => {
     AOS.init({
       duration: 1000, // animation duration in ms
@@ -65,18 +72,36 @@ const CMO = () => {
       link: "https://www.threads.net/@optilius",
     },
   ];
-  // const dynamicSocialContactData = SocialContactData.filter((item) => {
-  //   const key = `${item.title.toLowerCase()}_url`; // Dynamically generate the key
-  //   const apiLink = social_links?.[key]; // Safely access the link from API data
-  //   return apiLink && apiLink.trim() !== ""; // Filter out items with null or empty links
-  // }).map((item) => {
-  //   const key = `${item.title.toLowerCase()}_url`;
-  //   const apiLink = social_links?.[key];
-  //   return {
-  //     ...item,
-  //     link: apiLink, // Use the link from API data
-  //   };
-  // });
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(cmoInfoApi);
+        setTranslations(response.data.data.translations || {});
+        setData(response.data.data || {});
+        setSocialLinks(response.data?.data?.social_media || {});
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAllData();
+  }, []);
+  const dynamicSocialContactData = SocialContactData.filter((item) => {
+    const key = item.title.toLowerCase(); // Remove the "_url" suffix
+    const apiLink = socialLinks?.[key]; // Access the link directly
+    return apiLink && apiLink.trim() !== "";
+  }).map((item) => {
+    const key = item.title.toLowerCase();
+    const apiLink = socialLinks?.[key];
+    return {
+      ...item,
+      link: apiLink,
+    };
+  });
+
   return (
     <div>
       <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg bg-secondary overflow-x-hidden">
@@ -85,46 +110,58 @@ const CMO = () => {
             <div className="col-span-6">
               <div
                 className="shadow-lg w-full md:w-[80%]"
-                data-aos="fade-right" 
-                
+                data-aos="fade-right"
               >
-                <img src={cmoImg} alt="" className="rounded-lg" />
+                <img
+                  // src={data.image ? `${api}/${data?.image}` : cmoImg}
+                  src={data.image ? `${api}/${data?.image}` : cmoImg}
+                  alt=""
+                  className="rounded-lg"
+                />
               </div>
             </div>
             <div className="col-span-6">
               <div className="" data-aos="fade-left" data-aos-delay="300">
-
-              <SectionTitle
-                className=" w-full lg:w-[70%]"
-                text="Welcome to Our
+                <SectionTitle
+                  className=" w-full lg:w-[70%]"
+                  text="Welcome to Our
                Healthcare"
-                data-aos="fade-right"
-              />
-              <MinTitle
-                className="py-4 text-primary"
-                text={`"At our healthcare center, we prioritize patient well-being and deliver compassionate care. Our dedicated team of professionals is here to ensure the highest standards of medical excellence for you and your family."`}
-              />
+                  data-aos="fade-right"
+                />
+                <MinTitle
+                  className="py-4 text-primary"
+                  text={`"At our healthcare center, we prioritize patient well-being and deliver compassionate care. Our dedicated team of professionals is here to ensure the highest standards of medical excellence for you and your family."`}
+                />
               </div>
               <div
                 className="max-w-[200px] hover:scale-110 duration-500"
                 data-aos="fade-left"
               >
-                <img src={cmoSignature} alt="" />
+                <img
+                  src={
+                    data.signature ? `${api}/${data?.signature}` : cmoSignature
+                  }
+                  alt=""
+                />
               </div>
               <div className="" data-aos="fade-left">
                 <MidTitle
                   className="text-theme font-bold"
-                  text="Dr. Israt Jahan"
+                  text={`${data?.first_name} ${data?.last_name}`}
                 />
                 <MinTitle
                   className="text-primary py-2 opacity-[0.8] "
-                  text="Chief Medical Officer"
+                  text={`${
+                    data.designation
+                      ? data?.designation
+                      : "Chief Medical Officer"
+                  }`}
                 />
               </div>
-              {SocialContactData?.length > 0 && (
+              {dynamicSocialContactData?.length > 0 && (
                 <div className="" data-aos="fade-left" data-aos-delay="300">
                   <div className="flex flex-wrap items-center gap-1 sm:gap-2 md:gap-3 lg:gap-2 mt-1  ">
-                    {SocialContactData.map((item, index) => (
+                    {dynamicSocialContactData.map((item, index) => (
                       <a
                         key={index}
                         target="_blank"
