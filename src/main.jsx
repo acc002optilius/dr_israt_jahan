@@ -18,6 +18,9 @@ import Doctors from "./Pages/Doctors.jsx";
 import SingleDepartment from "./Pages/SingleDepartment.jsx";
 import Blog from "./Pages/Blog.jsx";
 import Gallery from "./Pages/Gallery.jsx";
+import CaseStudies from "./Pages/CaseStudies.jsx";
+import Faq from "./Pages/Faq.jsx";
+import FindDoctors from "./Pages/FindDoctors.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,10 +33,12 @@ const router = createBrowserRouter(
         <Route path="/service/:slug" element={<Contact />} />
         {/* Single Service */}
         <Route path="/department/:slug" element={<SingleDepartment />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/find-doctors" element={<FindDoctors />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/blogs" element={<Blog />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/faqs" element={<Faq />} />
 
         <Route path="*" element={<Error />} />
       </Route>

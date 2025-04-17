@@ -33,9 +33,15 @@ export const contactFormApi = `${api}/${version}/service-query/submit`;
 //Single Department Api (GET)
 export const singleDepartmentApi = `${api}/${version}/department?slug`;
 
-//All Blogs Api Api (GET)
+//All Blogs  Api (GET)
 export const blogsApi = `${api}/${version}/blogs`;
 
-//All Gallery Api Api (GET)
+//All Gallery  Api (GET)
 export const galleryApi = `${api}/${version}/gallery`;
+
+//All Case Studyies  Api (GET)
+export const caseStudiesApi = `${api}/${version}/case-studies`;
+
+//FAQ's   Api (GET)
+export const faqDataApi = `${api}/${version}/faq`;
 

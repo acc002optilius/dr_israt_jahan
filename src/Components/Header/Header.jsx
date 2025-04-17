@@ -21,7 +21,7 @@ const Header = () => {
   // Static menu data - replace with API call later
   const menuItems = [
     { name: "Home", href: "/", hasDropdown: false },
-    { name: "Find a Doctor", href: "#", hasDropdown: false },
+    { name: "Find a Doctor", href: "/find-doctors", hasDropdown: false },
     { name: "About", href: "#", hasDropdown: false },
     {
       name: "Services",

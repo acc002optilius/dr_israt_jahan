@@ -1,6 +1,66 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import SectionTitle from '../Layout/Title/SectionTitle'
+import InputLabel from '../Layout/Input/InputLabel/InputLabel'
+import UserAuthInput from '../Layout/Input/UserAuthForm/UserAuthInput'
+import { getTranslation } from '../Utils/Translation/translationUtils'
+import { findDoctorsApi } from '../Api/Api'
+import Container from '../Layout/Container'
+import DoctorCard from '../Layout/Card/DoctorCard'
+import MinTitle from '../Layout/Title/MinTitle'
+const FindDoctors = ({
+  selectedLanguage,
+  translations,
+  handleChange,
+  Search_by_Department,
+  Search_by_Name,
+  inputErrors
+}) => {
+  const [apiData, setApiData] = useState(null)
 
-const Doctors = () => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetch(findDoctorsApi)
+      .then((res) => {
+        if (!res.ok) throw new Error('Something went wrong!')
+        return res.json()
+      })
+      .then((data) => {
+        setApiData(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error}</p>
+  if (!apiData?.data?.departments?.length) return <p>No departments found.</p>
+
+  const departments = apiData.data.departments
+
+  // Just for demo: Simulate doctors based on departments (until API provides doctors list)
+  const dummyDoctors = departments.map((dept, index) => ({
+    id: index + 1,
+    name: `Dr. ${dept.name}`,
+    department: dept.name
+  }))
+
+  const filteredDoctors = dummyDoctors.filter((doctor) => {
+    const matchesName = Search_by_Name
+      ? doctor.name.toLowerCase().includes(Search_by_Name.toLowerCase())
+      : true
+
+    const matchesDept = Search_by_Department
+      ? doctor.department === Search_by_Department
+      : true
+
+    return matchesName && matchesDept
+  })
+
   return (
     <>
       <section className='shadow-md py-10'>
@@ -116,4 +176,4 @@ const Doctors = () => {
   )
 }
 
-export default Doctors
+export default FindDoctors
