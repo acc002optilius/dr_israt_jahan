@@ -34,6 +34,7 @@ const SingleDepartment = () => {
         const res = await fetch(`${singleDepartmentApi}=${slug}`);
         if (!res.ok) throw new Error("Failed to fetch department");
         const data = await res.json();
+
         setDepartment(data.data?.department || {});
         const translationArray = data.data?.department?.translations || [];
         const translationMap = translationArray.reduce((acc, curr) => {
@@ -55,6 +56,7 @@ const SingleDepartment = () => {
       caption: (fancybox, slide) => {
         const imgIndex = slide.index;
         const imageData = department.gallery?.[imgIndex];
+
         return getImageCaption(imageData);
       },
     });
@@ -70,7 +72,7 @@ const SingleDepartment = () => {
   };
 
   const handlLoadMore = () => {
-    setVisibleItems((prev) => prev + 12);
+    setVisibleItems((prev) => prev + 8);
   };
 
   if (loading) return (
@@ -141,7 +143,7 @@ const SingleDepartment = () => {
 
       <Container>
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-          <SectionTitle text={displayName} />
+          <SectionTitle className="!text-primary" text={displayName} />
           <div className="relative aspect-[12/7] py-2 rounded-t-lg flex-1 overflow-hidden">
             <img
               loading="lazy"
@@ -163,9 +165,9 @@ const SingleDepartment = () => {
       <div className="bg-theme bg-opacity-[0.3]">
         <Container>
           <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-            <SectionTitle text={getTranslation("Services","Services")} />
+            <SectionTitle  className="!text-primary" text={getTranslation("Services", "Services")} />
             <MinTitle
-              className="!text-center w-full sm:w-[50%] text-primary mx-auto py-2"
+              className={" mx-auto "}
               text={getTranslation(
                 "Single_Department_Services",
                 "Cardiology encompasses a broad range of conditions affecting the heart and blood vessels, including"
@@ -179,7 +181,7 @@ const SingleDepartment = () => {
               const displayName = translation?.name || service.name;
 
               return (
-                <ul className="ml-5 mt-2.5" key={index}>
+                <ul className="ml-5" key={index}>
                   <li className="list-disc">{displayName}</li>
                 </ul>
               );
@@ -191,69 +193,70 @@ const SingleDepartment = () => {
 
       {/* Doctors */}
       <Container>
-        <SectionTitle className="text-center mt-10" text={getTranslation("Doctors", "Doctors")}/>
-        <MinTitle
-          className="text-center mt-2 w-96 mx-auto mb-5"
-          text={getTranslation("Single_Department_Doctors", "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers.")}
-        />
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-3.5">
-            {[...Array(visibleItems)].map((_, index) => (
-              <div
-                key={index}
-                className="border-[1px] border-primary border-opacity-[0.1] rounded-lg"
-              >
-                <div className="aspect-[14/9] overflow-hodden rounded-lg bg-skeletonLoading animate-pulse max-h-[250px]">
-                  <img className="w-full h-[230px] object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center bg-skeletonLoading animate-pulse rounded-lg" />
+        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
+          <SectionTitle className="text-center" text={getTranslation("Doctors", "Doctors")} />
+          <MinTitle
+            className="text-center mt-2 mx-auto mb-5"
+            text={getTranslation("Single_Department_Doctors", "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers.")}
+          />
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-3.5">
+              {[...Array(visibleItems)].map((_, index) => (
+                <div
+                  key={index}
+                  className="border-[1px] border-primary border-opacity-[0.1] rounded-lg"
+                >
+                  <div className="aspect-[14/9] overflow-hodden rounded-lg bg-skeletonLoading animate-pulse max-h-[250px]">
+                    <img className="w-full h-[230px] object-fit vertical-middle group-hover/outer:scale-125 group-hover/outer:translate-x-0 group-hover/outer:translate-y-0 transition-transform duration-500 ease-in-out transform origin-center bg-skeletonLoading animate-pulse rounded-lg" />
+                  </div>
+
+                  <div className="p-4">
+                    <div className="name w-[80%] h-3 mt-6 rounded-lg bg-skeletonLoading animate-pulse"></div>
+                    <div className="name w-[40%] h-3 mt-2 rounded-lg bg-skeletonLoading animate-pulse"></div>
+                    <div className="category w-[50%] mt-6 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
+                  </div>
                 </div>
-
-                <div className="p-4">
-                  <div className="name w-[80%] h-3 mt-6 rounded-lg bg-skeletonLoading animate-pulse"></div>
-                  <div className="name w-[40%] h-3 mt-2 rounded-lg bg-skeletonLoading animate-pulse"></div>
-                  <div className="category w-[50%] mt-6 h-2 bg-skeletonLoading animate-pulse rounded-lg"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-5">
-            {department?.doctors?.slice(0, visibleItems).map((doctor, index) => (
-              <DoctorCard
-                key={index}
-                id={doctor.doctor_id}
-                firstName={doctor.first_name}
-                lastName={doctor.last_name}
-                department={doctor.department}
-                image={doctor.image}
-                socialNetworks={doctor.socialNetworks}
-              />
-            ))}
-          </div>
-        )}
-
-
-        {department?.doctors?.length > visibleItems && (
-          <div className="mt-4 text-center mx-auto">
-            <div className="inline-block pt-4">
-              <LoadingButton
-                className="inline-block"
-                loadingTime="1000"
-                text="Load More"
-                onClick={viewMoreDoctors}
-              />
+              ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4">
+              {department?.doctors?.slice(0, visibleItems).map((doctor, index) => (
+                <DoctorCard
+                  key={index}
+                  id={doctor.doctor_id}
+                  firstName={doctor.first_name}
+                  lastName={doctor.last_name}
+                  department={doctor.department}
+                  image={doctor.image}
+                  socialNetworks={doctor.socialNetworks}
+                />
+              ))}
+            </div>
+          )}
+
+
+          {department?.doctors?.length > visibleItems && (
+            <div className="mt-4 text-center mx-auto">
+              <div className="inline-block pt-4">
+                <LoadingButton
+                  className="inline-block"
+                  loadingTime="1000"
+                  text="Load More"
+                  onClick={viewMoreDoctors}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </Container>
 
       {/* case study */}
       <div className="bg-theme bg-opacity-[0.3] pt-9 pb-16">
         <Container>
-          <SectionTitle className="text-center mt-10" text="case study" />
+          <SectionTitle className="text-center mt-10" text={getTranslation("Case_Study", "case study")} />
           <MinTitle
-            className="text-center mt-2 w-96 mx-auto mb-5"
-            text="Case Studies That Inspire Confidence"
-          />
+            className="text-center mt-2 mx-auto mb-5"
+            text={getTranslation("Single_Department_Case_Studies", "Case Studies That Inspire Confidence")} />
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-3.5">
               {[...Array(visibleItems)].map((_, index) => (
