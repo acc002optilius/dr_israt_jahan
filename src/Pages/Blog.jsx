@@ -129,6 +129,19 @@ const Blog = () => {
               )}
             />
           </div>
+          <div className="flex justify-end ">
+            <select
+              className="py-3 pr-[20px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-[1px] border-borderColor focus:!border-theme focus:outline-none focus:ring-0 text-text-sm md:text-sm lg:text-sm mt-1 lg:mt-2 inline-block"
+
+            >
+              <option value="">
+              {getTranslation(
+                "Select_Blog_Category",
+                "Select Blog Category"
+              )}
+              </option>
+            </select>
+          </div>
           <div data-aos="fade-up" className="pt-6">
             <div className="">
               {isLoading ? (
