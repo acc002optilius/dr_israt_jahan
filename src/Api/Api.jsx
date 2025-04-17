@@ -28,18 +28,30 @@ export const contactPageApi = `${api}/${version}/contact`;
 //Contact Form Data Api (GET)
 export const contactFormApi = `${api}/${version}/service-query/submit`;
 
-//Single Department Api (GET)
+// Single Department Api (GET)
 export const singleDepartmentApi = `${api}/${version}/department?slug`;
 
-//All Blogs  Api (GET)
+// All Blogs  Api (GET)
 export const blogsApi = `${api}/${version}/blogs`;
 
-//All Gallery  Api (GET)
+// All Gallery  Api (GET)
 export const galleryApi = `${api}/${version}/gallery`;
 
-//All Case Studyies  Api (GET)
+// All Case Studyies  Api (GET)
 export const caseStudiesApi = `${api}/${version}/case-studies`;
 
-//FAQ's   Api (GET)
+// FAQ's   Api (GET)
 export const faqDataApi = `${api}/${version}/faq`;
+
+// All Doctors  Api (GET)
+export const allDoctorsApi = `${api}/${version}/doctors`;
+
+// Site Visitors  Api (GET)
+export const siteVisitorsApi = `${api}/${version}/visitor/stats`;
+
+// About Us  Api (GET)
+export const aboutUsApi = `${api}/${version}/about-us`;
+
+// All Departments Api (GET)
+export const allDepartments = `${api}/${version}/departments`;
 

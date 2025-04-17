@@ -21,6 +21,7 @@ import Gallery from "./Pages/Gallery.jsx";
 import CaseStudies from "./Pages/CaseStudies.jsx";
 import Faq from "./Pages/Faq.jsx";
 import FindDoctors from "./Pages/FindDoctors.jsx";
+import AboutUs from "./Pages/AboutUs.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/faqs" element={<Faq />} />
+        <Route path="/about-us" element={<AboutUs />} />
 
         <Route path="*" element={<Error />} />
       </Route>

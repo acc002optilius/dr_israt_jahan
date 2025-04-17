@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import MidTitle from "../../Layout/Title/MidTitle";
 import {
@@ -34,10 +34,11 @@ import ExtraMidTitle from "../../Layout/Title/ExtraMidTitle";
 import downloadPlaystore from "../../assets/Footer/downloadPlaystore.png";
 import downloadAppstore from "../../assets/Footer/downloadAppstore.png";
 import { useSelector } from "react-redux";
-import { api } from "../../Api/Api";
+import { api, siteVisitorsApi } from "../../Api/Api";
 import Swal from "sweetalert2";
 import { FiMapPin } from "react-icons/fi";
 import { LuTimerOff } from "react-icons/lu";
+import axios from "axios";
 // import Swal from 'sweetalert2/dist/sweetalert2.js'
 // import "sweetalert2/src/sweetalert2.scss";
 
@@ -177,8 +178,8 @@ export const quickLink = [
 // ];
 
 const Footer = () => {
+  const [siteVisitors, setSiteVisitors] = useState([]);
   const footerData = useSelector((state) => state.commonData?.siteCommonData);
-  const demo = useSelector((state) => console.log(state));
   const {
     site_footer_logo,
     short_bio,
@@ -192,9 +193,23 @@ const Footer = () => {
     map_location,
     email,
     closed_on,
-
     opening_hours,
   } = footerData;
+  // siteVisitorsApi
+  // Site Visitor Api Feched Here
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        // Fetch all data in parallel
+        const response = await axios.get(siteVisitorsApi);
+        setSiteVisitors(response.data.data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+    fetchAllData();
+  }, [siteVisitors]);
 
   const dynamicSocialContactData = SocialContactData.filter((item) => {
     const key = `${item.title.toLowerCase()}_url`; // Dynamically generate the key
@@ -277,6 +292,7 @@ const Footer = () => {
     );
     return translation ? translation.value : defaultText;
   };
+
   return (
     <>
       <div className="  bg-theme !z-[6] relative">
@@ -462,21 +478,22 @@ const Footer = () => {
                     <li className="pb-1 md:pb-3">
                       <MinTitle
                         className="text-secondary text-md duration-300 inline-block group-hover:text-secondary font-normal"
-                        text={`Total Visitor : `}
+                        text={`Today's Visitor : ${siteVisitors?.today} `}
                       />
                     </li>
                     <li className="pb-1 md:pb-3">
                       <MinTitle
                         className="text-secondary text-md duration-300 inline-block group-hover:text-secondary font-normal"
-                        text={`Unique Visitor  : `}
+                        text={`Total Visitor : ${siteVisitors?.total}`}
                       />
                     </li>
                     <li className="pb-1 md:pb-3">
                       <MinTitle
                         className="text-secondary text-md duration-300 inline-block group-hover:text-secondary font-normal"
-                        text={`Page Visitor : `}
+                        text={`Unique Visitor  : ${siteVisitors?.unique}`}
                       />
                     </li>
+
                   </ul>
                 </div>
                 {/* Download App */}
