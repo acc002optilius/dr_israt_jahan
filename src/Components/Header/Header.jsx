@@ -22,7 +22,7 @@ const Header = () => {
   const menuItems = [
     { name: "Home", href: "/", hasDropdown: false },
     { name: "Find a Doctor", href: "/find-doctors", hasDropdown: false },
-    { name: "About", href: "#", hasDropdown: false },
+    { name: "About", href: "about-us", hasDropdown: false },
     {
       name: "Services",
       href: "#",

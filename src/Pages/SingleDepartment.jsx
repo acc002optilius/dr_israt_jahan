@@ -152,7 +152,8 @@ const SingleDepartment = () => {
               className="w-full rounded-md h-full object-fill"
             />
           </div>
-          <p className="py-2.5">{shortDesc}</p>
+          <p className="pt-2.5 pb-8">{shortDesc}</p>
+          <h2 className="capitalize text-3xl font-semibold mb-2.5">more about this</h2>
           <p
             dangerouslySetInnerHTML={{
               __html: htmlTruncate(DOMPurify.sanitize(detailedDesc))

@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import SectionTitle from '../Layout/Title/SectionTitle'
 import InputLabel from '../Layout/Input/InputLabel/InputLabel'
 import UserAuthInput from '../Layout/Input/UserAuthForm/UserAuthInput'
 import { getTranslation } from '../Utils/Translation/translationUtils'
-import { findDoctorsApi, doctorsApi } from '../Api/Api'
+import { allDepartments, doctorsApi, findDoctorsApi } from '../Api/Api'
 import Container from '../Layout/Container'
 import DoctorCard from '../Layout/Card/DoctorCard'
 import MinTitle from '../Layout/Title/MinTitle'
 import LoadingButton from '../Layout/Button/LoadingButton'
 import { useSelector } from 'react-redux'
 
-const Doctors = () => {
+const FindDoctors = () => {
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   )
@@ -18,39 +18,44 @@ const Doctors = () => {
   const [translations, setTranslations] = useState({})
   const [visibleItems, setVisibleItems] = useState(12)
   const [departments, setDepartments] = useState([])
+  const [popular_doctors, setPopularDoctors] = useState([])
+  console.log(popular_doctors);
+  
   const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const [search_by_Name, setSearchByName] = useState('')
   const [search_by_Department, setSearchByDepartment] = useState('')
+  console.log(search_by_Department);
+
+  const [inputErrors, setInputErrors] = useState({})
 
   const viewMoreDoctors = () => {
     setVisibleItems((prev) => prev + 8)
   }
 
   const handleChange = (field, value) => {
-    const handlers = {
-      search_by_Name: setSearchByName,
-      search_by_Department: setSearchByDepartment,
-    }
-    if (handlers[field]) handlers[field](value)
+    if (field === 'search_by_Name') setSearchByName(value)
+    if (field === 'search_by_Department') setSearchByDepartment(value)
   }
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const deptRes = await fetch(findDoctorsApi)
+        const deptRes = await fetch(allDepartments)
         if (!deptRes.ok) throw new Error('Failed to fetch departments.')
         const deptData = await deptRes.json()
         setDepartments(deptData.data?.departments || [])
 
-        const docRes = await fetch(doctorsApi)
+        const docRes = await fetch(findDoctorsApi)
         if (!docRes.ok) throw new Error('Failed to fetch doctors.')
         const docData = await docRes.json()
-        setDoctors(docData.data?.doctors || [])
-        setTranslations(docData.data?.translations || {})
+        setPopularDoctors(docData.data?.popular_doctors || [])
+
+        // setTranslations(docData.data?.translations || {})
+        
       } catch (err) {
         setError(err.message)
       } finally {
@@ -58,8 +63,27 @@ const Doctors = () => {
       }
     }
 
+
     fetchData()
   }, [])
+
+  // const fetchDoctorsByDepartment = async (search_by_Department) => {
+  //   const response = await fetch(findDoctorsApi, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       department_id: search_by_Department,
+  //     }),
+  //   });
+
+  //   const data = await response.json();
+  //   // now you can work with `data`
+  //   console.log(data);
+  // };
+
+  // fetchDoctorsByDepartment()
 
   const getTranslatedContent = (item) => {
     if (
@@ -84,19 +108,18 @@ const Doctors = () => {
     }
   }
 
-  const filteredDoctors = useMemo(() => {
-    return doctors.filter((doctor) => {
-      const matchesName = search_by_Name
-        ? `${doctor.first_name || ''} ${doctor.last_name || ''}`.toLowerCase().includes(search_by_Name.toLowerCase())
-        : true
+  const filteredDoctors = doctors.filter((doctor) => {
+    const matchesName = search_by_Name
+      ? doctor.first_name?.toLowerCase().includes(search_by_Name.toLowerCase()) ||
+      doctor.last_name?.toLowerCase().includes(search_by_Name.toLowerCase())
+      : true
 
-      const matchesDept = search_by_Department
-        ? doctor.department?.id?.toString() === search_by_Department
-        : true
+    // const matchesDept = search_by_Department
+    //   ? doctor.department?.name === search_by_Department
+    //   : true
 
-      return matchesName && matchesDept
-    })
-  }, [doctors, search_by_Name, search_by_Department])
+    return matchesName
+  })
 
   return (
     <>
@@ -114,6 +137,7 @@ const Doctors = () => {
                   'Search_By_Department',
                   'Search By Department'
                 )}
+                required={true}
               />
               <select
                 className="py-3 pr-[20px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-[1px] border-borderColor focus:!border-theme focus:outline-none focus:ring-0 text-text-sm md:text-sm lg:text-sm mt-1 lg:mt-2 w-full"
@@ -123,15 +147,21 @@ const Doctors = () => {
                 <option value="">
                   {getTranslation(translations, selectedLanguage, 'Search_By_Department', '--Search By Department--')}
                 </option>
-                {departments?.map((item) => {
+
+                {departments?.map((item, index) => {
                   const content = getTranslatedContent(item)
                   return (
-                    <option key={item.id} value={item.id}>
+                    <option key={index} value={content.slug}>
                       {content.name}
                     </option>
                   )
                 })}
               </select>
+              {inputErrors?.search_by_Department && (
+                <p className="text-red-500 text-xs pt-[2px]">
+                  {inputErrors.search_by_Department}
+                </p>
+              )}
             </div>
 
             {/* Search by Name */}
@@ -143,6 +173,7 @@ const Doctors = () => {
                   'Search_By_Name',
                   'Search By Name'
                 )}
+                required={true}
               />
               <UserAuthInput
                 className="py-3 pr-[20px] pl-[8px] text-base rounded-md text-primary cursor-pointer border-[1px] border-borderColor focus:!border-theme focus:outline-none focus:ring-0 text-text-sm md:text-sm lg:text-sm mt-1 lg:mt-2 w-full"
@@ -156,7 +187,13 @@ const Doctors = () => {
                   'Search By Name'
                 )}
                 name="search_by_Name"
+                required={true}
               />
+              {inputErrors?.search_by_Name && (
+                <p className="text-red-500 text-xs pt-[2px]">
+                  {inputErrors.search_by_Name}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -189,8 +226,8 @@ const Doctors = () => {
           </div>
         ) : (
           <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-5">
-            {filteredDoctors.length ? (
-              filteredDoctors.slice(0, visibleItems).map((doctor) => (
+            {popular_doctors.length ? (
+              popular_doctors.slice(0, visibleItems).map((doctor) => (
                 <DoctorCard
                   key={doctor.doctor_id}
                   id={doctor.doctor_id}
@@ -209,12 +246,12 @@ const Doctors = () => {
           </div>
         )}
 
-        {filteredDoctors.length > visibleItems && (
+        {filteredDoctors?.length > visibleItems && (
           <div className="mt-4 text-center mx-auto">
             <div className="inline-block pt-4">
               <LoadingButton
                 className="inline-block"
-                loadingTime={1000}
+                loadingTime="1000"
                 text="Load More"
                 onClick={viewMoreDoctors}
               />
@@ -226,4 +263,4 @@ const Doctors = () => {
   )
 }
 
-export default Doctors
+export default FindDoctors
