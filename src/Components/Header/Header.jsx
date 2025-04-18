@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import Container from "../../Layout/Container";
 import { RiArrowDropDownLine, RiSearchLine } from "react-icons/ri";
@@ -8,9 +8,11 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "../../Redux/Slices/languageSlice";
 import { api } from "../../Api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dispatch = useDispatch();
@@ -18,11 +20,15 @@ const Header = () => {
     (state) => state.commonData?.siteCommonData
   );
 
-  // Static menu data - replace with API call later
+  // Close dropdowns when location changes
+  useEffect(() => {
+    setActiveDropdown(null);
+  }, [location.pathname]);
+
   const menuItems = [
     { name: "Home", href: "/", hasDropdown: false },
     { name: "Find a Doctor", href: "/find-doctors", hasDropdown: false },
-    { name: "About", href: "about-us", hasDropdown: false },
+    { name: "About", href: "/about-us", hasDropdown: false },
     {
       name: "Services",
       href: "#",
@@ -46,7 +52,6 @@ const Header = () => {
         { name: "Laboratory", href: "#" },
       ],
     },
-    // { name: "Blog", href: "/blogs", hasDropdown: false },
     { name: "Contact", href: "/contact", hasDropdown: false },
     {
       name: "More",
@@ -56,7 +61,7 @@ const Header = () => {
         { name: "Blog", href: "/blogs" },
         { name: "Galarry", href: "/gallery" },
         { name: "Case Studies", href: "/case-studies" },
-        { name: "FAQ's", href: "faqs" },
+        { name: "FAQ's", href: "/faqs" },
       ],
     },
   ];
@@ -69,23 +74,30 @@ const Header = () => {
     (state) => state.commonData.siteCommonData
   );
   const handleLanguageSelect = (language) => {
-    dispatch(setLanguage(language)); // language is the full object now
+    dispatch(setLanguage(language));
   };
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
 
-  // PAGE
   const handleGoPage = (page) => {
-    navigate(page)
-  }
+    setActiveDropdown(null); // Close any open dropdowns before navigating
+    navigate(page);
+  };
+
+  const isActive = (href) => {
+    if (href === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(href) && href !== "/";
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-theme shadow-sm">
       <Container>
-        <div className="flex justify-between  items-center ">
+        <div className="flex justify-between items-center">
           <div className="w-[11%]">
-            {/* Logo */}
-            <a href="#" className="text-2xl font-bold text-blue-600 ">
+            <a href="/" className="text-2xl font-bold text-blue-600">
               <div className="rounded-md px-2 py-1 bg-secondary">
                 <img
                   className="w-full rounded-sm"
@@ -95,15 +107,14 @@ const Header = () => {
               </div>
             </a>
           </div>
-          <div className="flex justify-between items-center gap-2">
-            <div className=" ">
-              {/* Desktop Navigation */}
+          <div className="lg:flex justify-between items-center gap-2 hidden lg:block">
+            <div className="">
               <nav className="hidden md:block">
                 <ul className="flex gap-2">
                   {menuItems.map((item) => (
                     <li
                       key={item.name}
-                      className="relative "
+                      className="relative"
                       onMouseEnter={() =>
                         item.hasDropdown && toggleDropdown(item.name)
                       }
@@ -111,15 +122,17 @@ const Header = () => {
                         item.hasDropdown && toggleDropdown(item.name)
                       }
                     >
-                      <div className="flex items-center ">
+                      <div className="flex items-center">
                         <div
                           onClick={() => handleGoPage(item.href)}
-                          className={`nav-link text-sm px-3 my-6 cursor-pointer font-medium text-secondary  transition-colors relative group ${
-                            activeDropdown === item.name ? "" : ""
+                          className={`nav-link text-sm px-3 my-6 cursor-pointer font-medium text-secondary transition-colors relative group ${
+                            isActive(item.href) ? "border-b-[1px] border-secondary" : ""
                           }`}
                         >
                           {item.name}
-                          <span className="absolute bottom-0 left-0 w-0 h-[0.3px] bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                          {!isActive(item.href) && (
+                            <span className="absolute bottom-0 left-0 w-0 h-[0.3px] bg-secondary transition-all duration-300 group-hover:w-full"></span>
+                          )}
                         </div>
                         {item.hasDropdown && (
                           <IoIosArrowDown
@@ -140,10 +153,11 @@ const Header = () => {
                         >
                           {item.dropdownItems?.map((dropdownItem) => (
                             <div
-                            onClick={() => handleGoPage(dropdownItem.href)}
+                              onClick={() => handleGoPage(dropdownItem.href)}
                               key={dropdownItem.name}
-
-                              className="dropdown-link block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors cursor-pointer"
+                              className={`dropdown-link block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors cursor-pointer ${
+                                isActive(dropdownItem.href) ? "bg-blue-50 text-blue-600" : ""
+                              }`}
                             >
                               {dropdownItem.name}
                             </div>
@@ -172,13 +186,11 @@ const Header = () => {
                   </span>
                 );
               })}
-              {/* <MdOutlineArrowDropDown /> */}
             </p>
           </div>
 
-          {/* Mobile menu button */}
           <button
-            className="md:hidden text-gray-700 focus:outline-none"
+            className="lg:hidden text-gray-700 focus:outline-none"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <svg
@@ -197,9 +209,8 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         <div
-          className={`md:hidden ${mobileMenuOpen ? "block" : "hidden"} py-4`}
+          className={`lg:hidden ${mobileMenuOpen ? "block" : "hidden"} py-4`}
         >
           <ul className="space-y-2">
             {menuItems.map((item) => (
@@ -227,7 +238,11 @@ const Header = () => {
                         <li key={dropdownItem.name}>
                           <a
                             href={dropdownItem.href}
-                            className="block px-3 py-2 text-gray-600 hover:bg-blue-50 rounded"
+                            className={`block px-3 py-2 ${
+                              isActive(dropdownItem.href)
+                                ? "text-blue-600 bg-blue-50 border-l-2 border-blue-600"
+                                : "text-gray-600 hover:bg-blue-50"
+                            } rounded`}
                           >
                             {dropdownItem.name}
                           </a>
@@ -238,7 +253,11 @@ const Header = () => {
                 ) : (
                   <a
                     href={item.href}
-                    className="block px-3 py-2 text-gray-700 hover:bg-blue-50 rounded"
+                    className={`block px-3 py-2 ${
+                      isActive(item.href)
+                        ? "text-blue-600 bg-blue-50 border-l-2 border-blue-600"
+                        : "text-gray-700 hover:bg-blue-50"
+                    } rounded`}
                   >
                     {item.name}
                   </a>

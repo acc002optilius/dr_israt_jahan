@@ -14,6 +14,7 @@ import "aos/dist/aos.css";
 import { IoArrowRedoSharp } from "react-icons/io5";
 import SecondaryButton from "../Button/SecondaryButton";
 import { getTranslation } from "../../Utils/Translation/translationUtils";
+import { useNavigate } from "react-router-dom";
 
 const CaseStudisCard = ({
   title,
@@ -25,12 +26,13 @@ const CaseStudisCard = ({
   department,
   translations
 }) => {
+  const navigate = useNavigate()
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
 
   const handleSingleService = (slug) => {
-    console.log(slug);
+    navigate(`/case/${slug}`)
   };
 
   useEffect(() => {
@@ -90,7 +92,7 @@ const CaseStudisCard = ({
         {/* Depart Ment */}
 
         {/* Hover content that slides up */}
-        <div className="absolute inset-0 flex flex-col items-start p-4 justify-end pb-8 opacity-0 group-hover:opacity-100 translate-y-10 group-hover:translate-y-0 transition-all duration-500">
+        <div className="absolute inset-0 flex flex-col items-start p-4 justify-end pb-8 opacity-0 group-hover:opacity-100 translate-y-10 group-hover:translate-y-0 transition-all duration-500 cursor-pointer">
           <MinTitle
             onClick={() => handleSingleService(slug)}
             className="text-white font-bold text-lg mb-2 hover:underline"

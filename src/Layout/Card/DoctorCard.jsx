@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa6";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useNavigate } from "react-router-dom";
 const DoctorCard = ({
   firstName,
   lastName,
@@ -22,7 +23,7 @@ const DoctorCard = ({
   cardAnimation,
   key,
 }) => {
-
+const navigate = useNavigate()
 
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
@@ -30,9 +31,9 @@ const DoctorCard = ({
 
 
   //   Handle Go Single Doctor
-  const handleSingleDoctor = (id) => {
-    console.log(id);
-
+  const handleSingleDoctor = (id , firstName , lastName) => {
+    const nameMarge = `${firstName}-${lastName}`.toLowerCase()
+    navigate(`/doctor/${nameMarge}` , {state : {id}})
   }
 
   // For Animation
@@ -101,7 +102,7 @@ const DoctorCard = ({
       </div>
 
       {/* Doctor info */}
-      <div onClick={() => handleSingleDoctor(doctorId)} className="bg-theme border-t-[1px] border-theme group-hover:border-secondary p-4 text-center flex-none duration-500 cursor-pointer">
+      <div onClick={() => handleSingleDoctor(doctorId , firstName , lastName)} className="bg-theme border-t-[1px] border-theme group-hover:border-secondary p-4 text-center flex-none duration-500 cursor-pointer">
         <MinTitle
           className="text-secondary font-bold text-lg"
           text={`${firstName} ${lastName}`.length > 15 ? `${firstName} ${lastName}`.slice(0, 20) + "..." : `${firstName} ${lastName}`}

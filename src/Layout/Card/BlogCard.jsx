@@ -19,6 +19,7 @@ import MidTitle from "../Title/MidTitle";
 import { MdDescription } from "react-icons/md";
 import DOMPurify from "dompurify";
 import htmlTruncate from "html-truncate";
+import { useNavigate } from "react-router-dom";
 const BlogCard = ({
   title,
   thumbnail,
@@ -29,6 +30,7 @@ const BlogCard = ({
   translations,
   displayDate,
 }) => {
+  const navigate = useNavigate()
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
@@ -53,7 +55,7 @@ const BlogCard = ({
   };
 
   const handleSingleBlog = (slug) => {
-    console.log(slug);
+    navigate(`/blog/${slug}`)
   };
 
   useEffect(() => {
@@ -105,8 +107,9 @@ const BlogCard = ({
         </div>
         {/* Title */}
         <MidTitle
-          className="text-primary font-semibold text-lg my-2 line-clamp-2 "
+          className="text-primary font-semibold text-lg my-2 line-clamp-2 cursor-pointer hover:text-theme duration-300"
           text={title}
+          onClick={() => handleSingleBlog(slug)}
         />
 
         {/* desc */}

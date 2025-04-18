@@ -16,7 +16,7 @@
     "axios": "^1.8.4",
     "dompurify": "^3.2.5",
     "font-awesome": "^4.7.0",
-    "framer-motion": "^12.6.3",
+    "framer-motion": "^12.7.4",
     "html-truncate": "^1.2.2",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",

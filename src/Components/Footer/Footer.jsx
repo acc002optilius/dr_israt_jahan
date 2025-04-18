@@ -345,7 +345,7 @@ const Footer = () => {
               /> */}
             </div>
             <div className="col-span-3">
-              <div className=" grid grid-cols-2 md:grid-cols-12 gap-3 sm:gap-6 md:gap-8  lg:gap-6">
+              <div className=" grid grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-6 md:gap-8  lg:gap-6">
                 {/* Quick Links */}
                 <div className="lg:col-span-3">
                   <ExtraMidTitle
