@@ -27,7 +27,7 @@ import TermCondition from "./Pages/TermCondition.jsx";
 import SingleBlogPage from "./Pages/SingleBlogPage.jsx";
 import SingleCaseStudy from "./Pages/SingleCaseStudy.jsx";
 import SingleDoctor from "./Pages/SingleDoctor.jsx";
-import SingleService from "./Components/Home/SingleService.jsx";
+import SingleService from "./Pages/SingleService.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
