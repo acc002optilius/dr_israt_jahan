@@ -18,6 +18,8 @@ export const makeAppointmentApi = `${api}/${version}/appointment-request/submit`
 //Find Doctors Api (GET)
 export const findDoctorsApi = `${api}/${version}/doctors/find`;
 
+//Doctors Api (GET)
+export const doctorsApi = `${api}/${version}/doctors`;
 
 //Subscription Api (GET)
 export const subscriptionApi = `${api}/${version}/subscribe`;
@@ -63,4 +65,16 @@ export const privacyPolicyPageContentApi = `${api}/${version}/page/content?slug=
 
 // Terms & Condition Page Content  Api (GET)
 export const termConditionPageContentApi = `${api}/${version}/page/content?slug=terms-conditions`;
+
+// Single Blog Page  Api (GET)
+export const singleBlogApi = `${api}/${version}/blog?slug`;
+
+// Single Case Study Page  Api (GET)
+export const singleCaseStudyApi = `${api}/${version}/case-study?slug`;
+
+// Single Doctor Page  Api (GET)
+export const singleDoctorApi = `${api}/${version}/doctor?id`;
+
+// Single Service Page  Api (GET)
+export const  singleServiceApi = `${api}/${version}/service?slug`;
 

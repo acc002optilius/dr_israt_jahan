@@ -13,14 +13,16 @@ import {
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { IoArrowRedoSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 const ServiceCard = ({ name, image, cardAnimation, key, slug, shortDesc }) => {
+  const navigate = useNavigate()
   const selectedLanguage = useSelector(
     (state) => state.language.selectedLanguage
   );
 
   //   Handle Go Single Doctor
   const handleSingleService = (slug) => {
-    console.log(slug);
+    navigate(`/service/${slug}`)
   };
 
   // For Animation

@@ -7,6 +7,7 @@ export const store = configureStore({
     reducer: {
       commonData : commonDataSlice,
       language : languageReducer ,
-
     },
   });
+
+

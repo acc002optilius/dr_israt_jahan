@@ -9,6 +9,7 @@ import {
   MdKeyboardArrowUp,
   MdCalendarToday,
   MdSearch,
+  MdBookmarkAdd,
 } from "react-icons/md";
 import { Bounce, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,17 +19,17 @@ import { getTranslation } from "../../Utils/Translation/translationUtils";
 const googleValSitekey = "6LesUa8qAAAAAPuU_Aied1IqtR9_8BIQ9EmYasye";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { makeAppointmentApi } from "../../Api/Api";
+import { allDoctorsApi, makeAppointmentApi } from "../../Api/Api";
 
-const MakeAppointmentForm = ({ translations, doctorsList }) => {
-  const staticPhoneCodes = [
-    { name: "Bangladesh", phonecode: "880", iso2: "bd" },
-    { name: "United States", phonecode: "1", iso2: "us" },
-    { name: "United Kingdom", phonecode: "44", iso2: "gb" },
-    { name: "Canada", phonecode: "1", iso2: "ca" },
-    { name: "Australia", phonecode: "61", iso2: "au" },
-  ];
-
+const staticPhoneCodes = [
+  { name: "Bangladesh", phonecode: "880", iso2: "bd" },
+  { name: "United States", phonecode: "1", iso2: "us" },
+  { name: "United Kingdom", phonecode: "44", iso2: "gb" },
+  { name: "Canada", phonecode: "1", iso2: "ca" },
+  { name: "Australia", phonecode: "61", iso2: "au" },
+];
+const MakeAppointmentForm = ({ translations, doctorId: initialDoctorId }) => {
+  const [doctorsList, setDoctorsList] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
@@ -38,6 +39,26 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
   );
   const [googleVal, setGoogleVal] = useState(null);
 
+  // All Doctor Api Fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(allDoctorsApi);
+      setDoctorsList(response.data?.data?.doctors || []);
+
+      // If initial doctorId is provided, set the doctor search value
+      if (initialDoctorId && response.data?.data?.doctors) {
+        const initialDoctor = response.data.data.doctors.find(
+          (d) => d.id === initialDoctorId || d.doctor_id === initialDoctorId
+        );
+        if (initialDoctor) {
+          setDoctorSearch(
+            `${initialDoctor.first_name} ${initialDoctor.last_name}`
+          );
+        }
+      }
+    };
+    fetchData();
+  }, [initialDoctorId]); // Add initialDoctorId as dependency
   // Calendar state and ref
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
@@ -64,7 +85,7 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
     appointmentDate: getCurrentDate(),
     phoneNumber: "",
     phoneCode: "",
-    doctorId: "",
+    doctorId: initialDoctorId || "",
     gender: "",
     message: "",
   });
@@ -224,17 +245,23 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
 
   // Handle doctor selection
   const handleDoctorSelect = (doctorId, doctorName) => {
-    handleChange("doctorId", doctorId); // This should set doctorId in formData
+    handleChange("doctorId", doctorId);
     setIsDoctorDropdownOpen(false);
-    setDoctorSearch(doctorName); // Show selected doctor name in search
+    setDoctorSearch(""); // Clear the search input after selection
   };
 
   // Get selected doctor name
   const selectedDoctorName = doctorsList?.find(
-    (d) => d.id === formData.doctorId
+    (d) => d.id === formData.doctorId || d.doctor_id === formData.doctorId
   )
-    ? `${doctorsList.find((d) => d.id === formData.doctorId).first_name} ${
-        doctorsList.find((d) => d.id === formData.doctorId).last_name
+    ? `${
+        doctorsList.find(
+          (d) => d.id === formData.doctorId || d.doctor_id === formData.doctorId
+        ).first_name
+      } ${
+        doctorsList.find(
+          (d) => d.id === formData.doctorId || d.doctor_id === formData.doctorId
+        ).last_name
       }`
     : getTranslation(
         translations,
@@ -251,7 +278,7 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
         }`}
         text={status?.message || ""}
       />
-      <div className="grid lg:grid-cols-2 gap-3 md:gap-4">
+      <div className="grid lg:grid-cols-2 gap-2 md:gap-3">
         {/* Patient Name */}
         <div>
           <InputLabel
@@ -546,20 +573,22 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
                 </div>
                 <div className="overflow-y-auto max-h-48">
                   {filteredDoctors?.length > 0 ? (
-                    filteredDoctors.map((doctor) => (
-                      <div
-                        key={doctor.id}
-                        className="p-2 hover:bg-gray-100 cursor-pointer text-text-sm md:text-sm lg:text-sm"
-                        onClick={() =>
-                          handleDoctorSelect(
-                            doctor.doctor_id,
-                            `${doctor.first_name} ${doctor.last_name}`
-                          )
-                        }
-                      >
-                        {doctor.first_name} {doctor.last_name}
-                      </div>
-                    ))
+                    <div className="">
+                      {filteredDoctors.map((doctor) => (
+                        <div
+                          key={doctor.id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer text-text-sm md:text-sm lg:text-sm"
+                          onClick={() =>
+                            handleDoctorSelect(
+                              doctor.id || doctor.doctor_id, // Use whichever field exists
+                              `${doctor.first_name} ${doctor.last_name}`
+                            )
+                          }
+                        >
+                          {doctor.first_name} {doctor.last_name}
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div className="p-2 text-gray-500 text-center">
                       No doctors found
@@ -605,30 +634,31 @@ const MakeAppointmentForm = ({ translations, doctorsList }) => {
           <p className="text-red-500 text-xs pt-[2px]">{inputErrors.message}</p>
         )}
       </div>
-
-      {/* Google Verification */}
-      <div className="mt-4">
-        <ReCAPTCHA
-          sitekey={googleValSitekey}
-          onChange={(googleVal) => setGoogleVal(googleVal)}
-        />
-      </div>
-
-      {/* Submit Button */}
-      <div className="inline-block">
-        <SubmitButton
-          className="w-full mt-4 md:mt-6 !border-none"
-          onClick={handleSubmit}
-          type="button"
-          loadingTime="2000"
-          text={getTranslation(
-            translations,
-            selectedLanguage,
-            "Book_Appointment",
-            "Book Appointment"
-          )}
-          disabled={!googleVal}
-        />
+      <div className="flex gap-4">
+        {/* Submit Button */}
+        <div className="inline-block">
+          <SubmitButton
+            className="w-full mt-4 md:mt-6 !border-none"
+            onClick={handleSubmit}
+            type="button"
+            icon={<MdBookmarkAdd />}
+            loadingTime="2000"
+            text={getTranslation(
+              translations,
+              selectedLanguage,
+              "Book_Appointment",
+              "Book Appointment"
+            )}
+            disabled={!googleVal}
+          />
+        </div>
+        {/* Google Verification */}
+        <div className="mt-4">
+          <ReCAPTCHA
+            sitekey={googleValSitekey}
+            onChange={(googleVal) => setGoogleVal(googleVal)}
+          />
+        </div>
       </div>
     </div>
   );

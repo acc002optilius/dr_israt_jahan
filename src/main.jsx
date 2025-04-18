@@ -24,22 +24,31 @@ import FindDoctors from "./Pages/FindDoctors.jsx";
 import AboutUs from "./Pages/AboutUs.jsx";
 import PrivacyPolicy from "./Pages/PrivacyPolicy.jsx";
 import TermCondition from "./Pages/TermCondition.jsx";
+import SingleBlogPage from "./Pages/SingleBlogPage.jsx";
+import SingleCaseStudy from "./Pages/SingleCaseStudy.jsx";
+import SingleDoctor from "./Pages/SingleDoctor.jsx";
+import SingleService from "./Components/Home/SingleService.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App />}>
         <Route path="/" element={<Home />} />
+        {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/contact" element={<Contact />} />
         {/* Single Service */}
-        <Route path="/service/:slug" element={<Contact />} />
+        <Route path="/service/:slug" element={<SingleService />} />
         {/* Single Service */}
         <Route path="/department/:slug" element={<SingleDepartment />} />
         <Route path="/find-doctors" element={<FindDoctors />} />
         <Route path="/doctors" element={<Doctors />} />
+        <Route path="/doctor/:slug" element={<SingleDoctor />} />
         <Route path="/blogs" element={<Blog />} />
+        <Route path="/blog/:slug" element={<SingleBlogPage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/case/:slug" element={<SingleCaseStudy />} />
+
         <Route path="/faqs" element={<Faq />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

@@ -87,7 +87,6 @@ const Home = () => {
         data={homeContentData?.doctors}
       />
       <MakeAppointment
-        doctorsList={homeContentData.doctors}
         translations={homeContentData.translations}
       />
       <OurServices
