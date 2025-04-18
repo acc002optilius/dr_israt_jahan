@@ -22,6 +22,8 @@ import CaseStudies from "./Pages/CaseStudies.jsx";
 import Faq from "./Pages/Faq.jsx";
 import FindDoctors from "./Pages/FindDoctors.jsx";
 import AboutUs from "./Pages/AboutUs.jsx";
+import PrivacyPolicy from "./Pages/PrivacyPolicy.jsx";
+import TermCondition from "./Pages/TermCondition.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,6 +43,8 @@ const router = createBrowserRouter(
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/faqs" element={<Faq />} />
         <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/term-condition" element={<TermCondition />} />
 
         <Route path="*" element={<Error />} />
       </Route>

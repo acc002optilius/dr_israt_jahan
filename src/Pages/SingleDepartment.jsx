@@ -144,7 +144,7 @@ const SingleDepartment = () => {
       <Container>
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
           <SectionTitle className="!text-primary" text={displayName} />
-          <div className="relative aspect-[12/7] py-2 rounded-t-lg flex-1 overflow-hidden">
+          <div className="relative aspect-[12/7] mt-2.5 py-2 rounded-t-lg flex-1 overflow-hidden">
             <img
               loading="lazy"
               src={`${api}/${department.image}`}
@@ -152,9 +152,9 @@ const SingleDepartment = () => {
               className="w-full rounded-md h-full object-fill"
             />
           </div>
-          <p className="pt-2.5 pb-8">{shortDesc}</p>
-          <h2 className="capitalize text-3xl font-semibold mb-2.5">more about this</h2>
-          <p
+          <MinTitle className="mt-5 mb-10" text={shortDesc} />
+          <SectionTitle className="!text-primary !text-3xl capitalize mb-4" text={getTranslation("", "more about this")} />
+          <p className="text-justify text-primary"
             dangerouslySetInnerHTML={{
               __html: htmlTruncate(DOMPurify.sanitize(detailedDesc))
             }}
@@ -166,9 +166,9 @@ const SingleDepartment = () => {
       <div className="bg-theme bg-opacity-[0.3]">
         <Container>
           <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-            <SectionTitle  className="!text-primary" text={getTranslation("Services", "Services")} />
+            <SectionTitle  className="!text-primary mb-4" text={getTranslation("Services", "Services")} />
             <MinTitle
-              className={" mx-auto "}
+              className={" mx-auto mb-1"}
               text={getTranslation(
                 "Single_Department_Services",
                 "Cardiology encompasses a broad range of conditions affecting the heart and blood vessels, including"
@@ -182,7 +182,7 @@ const SingleDepartment = () => {
               const displayName = translation?.name || service.name;
 
               return (
-                <ul className="ml-5" key={index}>
+                <ul className="ml-6" key={index}>
                   <li className="list-disc">{displayName}</li>
                 </ul>
               );
@@ -195,9 +195,9 @@ const SingleDepartment = () => {
       {/* Doctors */}
       <Container>
         <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-          <SectionTitle className="text-center" text={getTranslation("Doctors", "Doctors")} />
+          <SectionTitle className="text-center mb-4" text={getTranslation("Doctors", "Doctors")} />
           <MinTitle
-            className="text-center mt-2 mx-auto mb-5"
+            className="text-center mt-2 mx-auto mb-6 max-w-[500px]"
             text={getTranslation("Single_Department_Doctors", "Our commitment to excellence has earned us recognition as one of the nation's top healthcare providers.")}
           />
           {loading ? (
@@ -254,9 +254,9 @@ const SingleDepartment = () => {
       {/* case study */}
       <div className="bg-theme bg-opacity-[0.3] pt-9 pb-16">
         <Container>
-          <SectionTitle className="text-center mt-10" text={getTranslation("Case_Study", "case study")} />
+          <SectionTitle className="text-center mt-10 mb-4" text={getTranslation("Case_Study", "case study")} />
           <MinTitle
-            className="text-center mt-2 mx-auto mb-5"
+            className="text-center mt-2 mx-auto mb-6 max-w-[500px]"
             text={getTranslation("Single_Department_Case_Studies", "Case Studies That Inspire Confidence")} />
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-3.5">
@@ -322,7 +322,7 @@ const SingleDepartment = () => {
             data-aos-delay="200"
           >
             <SectionTitle
-              className="!text-center"
+              className="!text-center mb-4"
               text={getTranslation("Gallery", "Gallery")}
             />
             <MinTitle

@@ -197,6 +197,7 @@ const Footer = () => {
   } = footerData;
   // siteVisitorsApi
   // Site Visitor Api Feched Here
+  
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -223,6 +224,7 @@ const Footer = () => {
       link: apiLink, // Use the link from API data
     };
   });
+
 
   const handleAppLinkClick = (link) => {
     if (!link) {

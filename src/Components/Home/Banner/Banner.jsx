@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import PrimaryButton from "../../../Layout/Button/PrimaryButton";
 import SecondaryButton from "../../../Layout/Button/SecondaryButton";
 import { LuFileText } from "react-icons/lu";
-import { MdOutlineFindReplace } from "react-icons/md";
+import { MdAddIcCall, MdOutlineFindReplace } from "react-icons/md";
 import { RiUserSearchFill } from "react-icons/ri";
 
 
@@ -186,8 +186,9 @@ const Banner = ({ bannerData, translations }) => {
                     text={translatedItem.description}
                   />
                 )}
-                <a href={`tel:${phone}`} className="hotline text-xl py-3 px-4 bg-transparent border-[1px] border-seconary w-[30%] block my-6  mx-auto text-center  ">
-                  <span className="font-semibold"> {getTranslation(
+                <a href={`tel:${phone}`} className="hotline text-xl py-3 px-4 bg-transparent border-[1px] border-seconary w-[30%] block my-6  mx-auto text-center  flex items-center gap-2 justify-center">
+                <MdAddIcCall />
+                <span className="font-semibold"> {getTranslation(
                     "Hotline",
                     "Hotline"
                   )} </span>: <span className="!text-medium">{phone}</span>

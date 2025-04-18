@@ -113,11 +113,10 @@ const AboutUs = () => {
     };
   };
   return (
-    <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg overflow-x-hidden">
+    <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg overflow-hidden">
       <Container>
-        <div className="grid grid-cols-2 gap-6 pb-sectionSm md:pb-sectionMd lg:pb-sectionLg xl:pb-sectionLg items-start">
-          <div
-            className="aspect-[4/3] mt-3"
+        <div className="grid grid-cols-1  md:grid-cols-2 gap-6 pb-sectionSm md:pb-sectionMd lg:pb-sectionLg xl:pb-sectionLg items-start">
+          <div className="aspect-[4/3] mt-3 order-2 md:order-1"
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="600"
@@ -129,7 +128,7 @@ const AboutUs = () => {
             />
           </div>
           <div
-            className=""
+            className="order-1 md:order-2"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="400"
@@ -156,8 +155,8 @@ const AboutUs = () => {
                 <div
                   className="flex gap-4 items-start"
                   data-aos="fade-left"
-                  data-aos-duration="1000"
-                  data-aos-delay="600"
+                  data-aos-duration="600"
+                  data-aos-delay="300"
                   key={index}
                 >
                   <p className="text-lga p-3 bg-theme text-secondary rounded-full">
@@ -180,26 +179,33 @@ const AboutUs = () => {
       <MissionVission translations={translations} />
 
       <Container>
-        <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg">
-          <div className="" data-aos="fade-in">
+        <div className="pt-sectionSm md:pt-sectionMd lg:pt-sectionLg xl:pt-sectionLg">
+        <div className="" data-aos="fade-up">
             <SectionTitle
               className="!text-center"
-              text={getTranslation("Doctors", "Doctors")}
+              text={getTranslation(
+                translations,
+                selectedLanguage,
+                "Board_Of_Directors",
+                "Board of directors"
+              )}
             />
             <MinTitle
               className="!text-center w-full sm:w-[50%] text-primary m-auto py-2"
               text={getTranslation(
-                "Doctors_home_included_section_desc",
-                "We have a team of experienced and qualified doctors who can provide you with the best possible care."
+                translations,
+                selectedLanguage,
+                "Board_Of_Directors_Sectioin_Desc",
+                "Meet our board of directors who are leading the way in the real estate industry."
               )}
             />
           </div>
-          <div className="">
+          <div className="pt-8">
             {isLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {[...Array(visibleItems)].map((_, index) => (
                   <div
-                    data-aos="zoom-out-up"
+                    data-aos="fade-in"
                     key={index}
                     className="border-[1px] aspect-[4/5] rounded-lg border-primary border-opacity-[0.2]  bg-skeletonLoading bg-opacity-[0.4] animate-pulse relative"
                   >
