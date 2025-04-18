@@ -14,7 +14,6 @@ export const landingSectionDataApi = `${api}/${version}/home/landing-section`;
 // Make A Appointment Api (Post)
 export const makeAppointmentApi = `${api}/${version}/appointment-request/submit`;
 
-
 //Find Doctors Api (GET)
 export const findDoctorsApi = `${api}/${version}/doctors/find`;
 
@@ -76,5 +75,7 @@ export const singleCaseStudyApi = `${api}/${version}/case-study?slug`;
 export const singleDoctorApi = `${api}/${version}/doctor?id`;
 
 // Single Service Page  Api (GET)
-export const  singleServiceApi = `${api}/${version}/service?slug`;
+export const singleServiceApi = `${api}/${version}/service?slug`;
 
+// All Service Page  Api (GET)
+export const allServicesApi = `${api}/${version}/services`;

@@ -28,7 +28,7 @@ const MakeAppointment = ({ translations, doctorsList }) => {
   }, []);
 
   return (
-    <div className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg bg-theme bg-opacity-[0.3]   overflow-hidden ">
+    <div id="makeAnAppointment" className="py-sectionSm md:py-sectionMd lg:py-sectionLg xl:py-sectionLg bg-theme bg-opacity-[0.3]   overflow-hidden ">
       <Container>
         <div className="w-full md:w-[95%] bg-secondary mx-auto p-4 px-6 py-12  md:px-12 rounded-3xl " data-aos="fade-up">
           <div className="grid md:grid-cols-12 gap-y-4 gap-x-12 items-center" >

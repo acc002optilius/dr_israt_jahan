@@ -222,7 +222,7 @@ const MakeAppointmentForm = ({ translations, doctorId: initialDoctorId }) => {
   const [selectedCode, setSelectedCode] = useState(
     staticPhoneCodes[0].phonecode
   );
-  const [selectedFlag, setSelectedFlag] = useState(staticPhoneCodes[0].iso2);
+  const [selectedFlag, setSelectedFlag] = useState(staticPhoneCodes[0]?.iso2);
   const dropdownPhoneRef = useRef(null);
 
   useEffect(() => {
@@ -365,14 +365,14 @@ const MakeAppointmentForm = ({ translations, doctorId: initialDoctorId }) => {
                         )
                         .map((item) => (
                           <div
-                            key={item.iso2}
+                            key={item?.iso2}
                             className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
                             onClick={() =>
-                              handlePhoneSelect(item.phonecode, item.iso2)
+                              handlePhoneSelect(item.phonecode, item?.iso2)
                             }
                           >
                             <img
-                              src={`https://flagcdn.com/w40/${item.iso2.toLowerCase()}.png`}
+                              src={`https://flagcdn.com/w40/${item?.iso2.toLowerCase()}.png`}
                               alt={`${item.name} flag`}
                               className="w-6 h-4"
                             />
@@ -634,7 +634,14 @@ const MakeAppointmentForm = ({ translations, doctorId: initialDoctorId }) => {
           <p className="text-red-500 text-xs pt-[2px]">{inputErrors.message}</p>
         )}
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center">
+                {/* Google Verification */}
+                <div className="mt-4">
+          <ReCAPTCHA
+            sitekey={googleValSitekey}
+            onChange={(googleVal) => setGoogleVal(googleVal)}
+          />
+        </div>
         {/* Submit Button */}
         <div className="inline-block">
           <SubmitButton
@@ -652,13 +659,7 @@ const MakeAppointmentForm = ({ translations, doctorId: initialDoctorId }) => {
             disabled={!googleVal}
           />
         </div>
-        {/* Google Verification */}
-        <div className="mt-4">
-          <ReCAPTCHA
-            sitekey={googleValSitekey}
-            onChange={(googleVal) => setGoogleVal(googleVal)}
-          />
-        </div>
+
       </div>
     </div>
   );

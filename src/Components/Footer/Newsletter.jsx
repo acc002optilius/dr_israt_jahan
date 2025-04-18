@@ -14,6 +14,8 @@ import SubmitButton from "../../Layout/Button/SubmitButton";
 import { Bounce, toast } from "react-toastify";
 import { GrSend } from "react-icons/gr";
 import LoadingButton from "../../Layout/Button/LoadingButton";
+import AOS from "aos";
+import "aos/dist/aos.css";
 const Newsletter = ({ translations, data }) => {
   const [visibleItems, setVisibleItems] = useState(8);
   const [email, setEmail] = useState("");
@@ -23,7 +25,12 @@ const Newsletter = ({ translations, data }) => {
     (state) => state.language.selectedLanguage
   );
 
-
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // animation duration in ms
+      once: false, // allows animation every time section enters view
+    });
+  }, []);
   const handleChangeEmail = (name, value) => {
     if (name === "email") {
       setEmail(value); // Logs the input value

@@ -60,7 +60,7 @@ const Banner = ({ bannerData, translations }) => {
     fade: true,
     cssEase: "linear",
     autoplay: true,
-    autoplaySpeed: 5000, // Time each slide is shown (matches zoom duration)
+    autoplaySpeed: 2000, // Time each slide is shown (matches zoom duration)
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (current, next) => setCurrentSlide(next),
@@ -194,10 +194,13 @@ const Banner = ({ bannerData, translations }) => {
                   )} </span>: <span className="!text-medium">{phone}</span>
                 </a>
                 <div className="btnList grid grid-cols-2 gap-6 w-[50%]  m-auto">
+                  <a href="#makeAnAppointment" className="">
                   <PrimaryButton className="capitalize font-medium" text={getTranslation(
                     "Make_An_Appointment",
                     "Make An Appointment "
                   )} icon={<LuFileText />} />
+
+                  </a>
                   <SecondaryButton className="capitalize font-medium" text={getTranslation(
                     "Find_A_Doctor",
                     "Find A Doctor"

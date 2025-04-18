@@ -7,10 +7,54 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setLanguage } from "../../Redux/Slices/languageSlice";
-import { api } from "../../Api/Api";
+import { allDepartments, allServicesApi, api } from "../../Api/Api";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 const Header = () => {
+  const [services , setServices] = useState([])
+  const [department , setDepartment] = useState([])
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+
+        // Fetch all data in parallel
+        const [serviceResponse, departmentResponse] =
+          await Promise.all([
+            axios.get(allServicesApi),
+            axios.get(allDepartments),
+          ]);
+          console.log(departmentResponse);
+          
+        setServices(serviceResponse.data.data.services);
+        setDepartment(departmentResponse.data.data.departments);
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+
+    fetchAllData();
+
+    return () => {
+      // setIsLoading(false);
+    };
+  }, []);
+  // useEffect(() => {
+  //   const fetchAllData = async () => {
+  //     try {
+  //       // Fetch all data in parallel
+  //       const response = await axios.get(allServicesApi);
+  //       setServices(response.data.data.services)
+        
+  //       // setSiteVisitors(response.data.data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     } finally {
+  //     }
+  //   };
+  //   fetchAllData();
+  // }, []);
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -26,45 +70,42 @@ const Header = () => {
   }, [location.pathname]);
 
   const menuItems = [
-    { name: "Home", href: "/", hasDropdown: false },
-    { name: "Find a Doctor", href: "/find-doctors", hasDropdown: false },
-    { name: "About", href: "/about-us", hasDropdown: false },
+    { name: "Home", slug: "/", hasDropdown: false },
+    { name: "Find a Doctor", slug: "/find-doctors", hasDropdown: false },
+    { name: "About", slug: "/about-us", hasDropdown: false },
     {
       name: "Services",
-      href: "#",
+      slug: "#",
       hasDropdown: true,
-      dropdownItems: [
-        { name: "Cardiology", href: "#" },
-        { name: "Neurology", href: "#" },
-        { name: "Pediatrics", href: "#" },
-        { name: "Dermatology", href: "#" },
-      ],
+      dropdownItems: services.map(service => ({
+        ...service,
+        slug: `/service/${service.slug}` // Add service path prefix
+      }))
     },
-    { name: "Doctors", href: "/doctors", hasDropdown: false },
+    { name: "Doctors", slug: "/doctors", hasDropdown: false },
     {
       name: "Departments",
-      href: "#",
+      slug: "#",
       hasDropdown: true,
-      dropdownItems: [
-        { name: "Emergency", href: "#" },
-        { name: "Surgery", href: "#" },
-        { name: "Radiology", href: "#" },
-        { name: "Laboratory", href: "#" },
-      ],
+      dropdownItems: department.map(dept => ({
+        ...dept,
+        slug: `/department/${dept.slug}` // Add department path prefix
+      }))
     },
-    { name: "Contact", href: "/contact", hasDropdown: false },
+    { name: "Contact", slug: "/contact", hasDropdown: false },
     {
       name: "More",
-      href: "#",
+      slug: "#",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Blog", href: "/blogs" },
-        { name: "Galarry", href: "/gallery" },
-        { name: "Case Studies", href: "/case-studies" },
-        { name: "FAQ's", href: "/faqs" },
+        { name: "Blog", slug: "/blogs" },
+        { name: "Galarry", slug: "/gallery" },
+        { name: "Case Studies", slug: "/case-studies" },
+        { name: "FAQ's", slug: "/faqs" },
       ],
     },
   ];
+
 
   const toggleDropdown = (itemName) => {
     setActiveDropdown(activeDropdown === itemName ? null : itemName);
@@ -85,11 +126,11 @@ const Header = () => {
     navigate(page);
   };
 
-  const isActive = (href) => {
-    if (href === "/") {
+  const isActive = (slug) => {
+    if (slug === "/") {
       return location.pathname === "/";
     }
-    return location.pathname.startsWith(href) && href !== "/";
+    return location.pathname.startsWith(slug) && slug !== "/";
   };
 
   return (
@@ -97,7 +138,7 @@ const Header = () => {
       <Container>
         <div className="flex justify-between items-center">
           <div className="w-[11%]">
-            <a href="/" className="text-2xl font-bold text-blue-600">
+            <a slug="/" className="text-2xl font-bold text-blue-600">
               <div className="rounded-md px-2 py-1 bg-secondary">
                 <img
                   className="w-full rounded-sm"
@@ -124,13 +165,13 @@ const Header = () => {
                     >
                       <div className="flex items-center">
                         <div
-                          onClick={() => handleGoPage(item.href)}
+                          onClick={() => handleGoPage(item.slug)}
                           className={`nav-link text-sm px-3 my-6 cursor-pointer font-medium text-secondary transition-colors relative group ${
-                            isActive(item.href) ? "border-b-[1px] border-secondary" : ""
+                            isActive(item.slug) ? "border-b-[1px] border-secondary" : ""
                           }`}
                         >
                           {item.name}
-                          {!isActive(item.href) && (
+                          {!isActive(item.slug) && (
                             <span className="absolute bottom-0 left-0 w-0 h-[0.3px] bg-secondary transition-all duration-300 group-hover:w-full"></span>
                           )}
                         </div>
@@ -153,10 +194,10 @@ const Header = () => {
                         >
                           {item.dropdownItems?.map((dropdownItem) => (
                             <div
-                              onClick={() => handleGoPage(dropdownItem.href)}
+                              onClick={() => handleGoPage(dropdownItem.slug)}
                               key={dropdownItem.name}
                               className={`dropdown-link block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors cursor-pointer ${
-                                isActive(dropdownItem.href) ? "bg-blue-50 text-blue-600" : ""
+                                isActive(dropdownItem.slug) ? "bg-blue-50 text-blue-600" : ""
                               }`}
                             >
                               {dropdownItem.name}
@@ -237,9 +278,9 @@ const Header = () => {
                       {item.dropdownItems?.map((dropdownItem) => (
                         <li key={dropdownItem.name}>
                           <a
-                            href={dropdownItem.href}
+                            slug={dropdownItem.slug}
                             className={`block px-3 py-2 ${
-                              isActive(dropdownItem.href)
+                              isActive(dropdownItem.slug)
                                 ? "text-blue-600 bg-blue-50 border-l-2 border-blue-600"
                                 : "text-gray-600 hover:bg-blue-50"
                             } rounded`}
@@ -252,9 +293,9 @@ const Header = () => {
                   </details>
                 ) : (
                   <a
-                    href={item.href}
+                    slug={item.slug}
                     className={`block px-3 py-2 ${
-                      isActive(item.href)
+                      isActive(item.slug)
                         ? "text-blue-600 bg-blue-50 border-l-2 border-blue-600"
                         : "text-gray-700 hover:bg-blue-50"
                     } rounded`}
